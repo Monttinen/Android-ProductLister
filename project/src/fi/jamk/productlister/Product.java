@@ -28,4 +28,9 @@ public class Product {
 	public String getProductBarcode(){
 		return ProductBarcode;
 	}
+	
+	@Override
+	public String toString(){
+		return ProductName;
+	}
 }
