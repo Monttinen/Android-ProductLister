@@ -4,7 +4,7 @@
     <string name="app_name">Product Lister</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-	<string name="product_search">Product Search</string>
+	<string name="product_search">Search Product</string>
 	<string name="product_search_search">Search</string>
 	<string name="product_search_add_product">Add Product</string>
 	<string name="product_search_add_shop">Add Shop</string>
@@ -12,5 +12,12 @@
 	<string name="product_add_take_picture_button">Take Picture</string>
 	<string name="product_add_name_view">Product Name</string>
 	<string name="product_add_add_button">Add Product</string>
+	<string name="select_product">Select Product</string>
+	<string name="next_step">Next Step</string>
+	<string name="add_price">Add Price</string>
+	<string name="product_add_price_product">Selected Product:</string>
+	<string name="product_add_price_shop">Selected Shop:</string>
+	<string name="unit_price">Unit Price</string>
+	<string name="quantity_price">Quantity Price</string>
 	
 </resources>

@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <!-- TextView for upper left corner containing "Add Prices" -->
+
+
+    <!-- TextView for "Selected Product:" text -->
+
+
+    <!-- TextView that will contain the selected product -->
+
+
+    <!-- TextView for "Selected Shop:" text -->
+
+
+    <!-- TextView that will contain the selected shop -->
+
+
+    <!-- TextView displaying "Unit Price" -->
+
+
+    <!-- TextView displaying "Quantity Price" -->
+
+
+    <!-- EditText for adding the products unit price -->
+
+
+    <!-- EditText for adding the products quantity price -->
+
+
+    <!-- Button to add new price -->
+
+    <Button
+        android:id="@+id/button1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/add_price" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:text="@string/add_price" />
+
+    <TextView
+        android:id="@+id/selected_product_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/textView1"
+        android:text="@string/product_add_price_product"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <EditText
+        android:id="@+id/product_add_quantity_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/product_add_price_quantity_view"
+        android:layout_alignBottom="@+id/product_add_price_quantity_view"
+        android:layout_alignParentRight="true"
+        android:ems="10" />
+
+    <TextView
+        android:id="@+id/product_add_price_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/selected_shop_view"
+        android:layout_alignParentRight="true"
+        android:text="TODO SELECTED PRODUCT"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/selected_shop_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/selected_product_view"
+        android:layout_marginTop="39dp"
+        android:text="@string/product_add_price_shop"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/product_add_price_shop_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/selected_shop_view"
+        android:layout_alignBottom="@+id/selected_shop_view"
+        android:layout_alignParentRight="true"
+        android:text="TODO SELECTED SHOP"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <TextView
+        android:id="@+id/product_add_price_unit_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/product_add_unit_price"
+        android:layout_alignBottom="@+id/product_add_unit_price"
+        android:layout_alignParentLeft="true"
+        android:text="@string/unit_price" />
+
+    <TextView
+        android:id="@+id/product_add_price_quantity_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/product_add_unit_price"
+        android:layout_marginTop="48dp"
+        android:text="@string/quantity_price" />
+
+    <EditText
+        android:id="@+id/product_add_unit_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/selected_shop_view"
+        android:layout_marginTop="69dp"
+        android:ems="10" >
+
+        <requestFocus />
+    </EditText>
+
+</RelativeLayout>
