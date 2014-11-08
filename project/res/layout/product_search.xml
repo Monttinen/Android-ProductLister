@@ -5,6 +5,7 @@
 
     <EditText
         android:id="@+id/product_search_textfield"
+        android:hint="@string/product_search_hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/product_search_search"

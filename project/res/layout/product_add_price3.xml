@@ -59,6 +59,7 @@
 
     <EditText
         android:id="@+id/product_add_quantity_price"
+        android:hint="@string/product_add_price_quantity_hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/product_add_price_quantity_view"
@@ -115,6 +116,7 @@
 
     <EditText
         android:id="@+id/product_add_unit_price"
+        android:hint="@string/product_add_price_unit_hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
