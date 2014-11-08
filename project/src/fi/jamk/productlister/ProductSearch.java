@@ -1,11 +1,7 @@
 package fi.jamk.productlister;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
 
 import android.app.Activity;
 import android.os.AsyncTask;
@@ -64,29 +60,21 @@ public class ProductSearch extends Activity {
 	private class SearchProducts extends AsyncTask<String, Void, ArrayList<Product>>{
 		@Override
 		protected void onPreExecute(){
+			// TODO some other progress dialog?
 			Toast.makeText(getApplicationContext(), "Searching...", Toast.LENGTH_SHORT).show();
 		}
 		
 		@Override
 		protected ArrayList<Product> doInBackground(String... keyword) {
 			ArrayList<Product> list = new ArrayList<Product>();
-			try {
-				list = db.searchProducts(keyword[0]);
-			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			list = db.searchProducts(keyword[0]);
+
 			return list;
 		}
 		
 		@Override
 		protected void onPostExecute(ArrayList<Product> list){
+			// TODO stop displaying other progress dialog
 			Toast.makeText(getApplicationContext(), "Found "+list.size()+" products.", Toast.LENGTH_SHORT).show();
 		}
 	}
