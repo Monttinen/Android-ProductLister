@@ -9,5 +9,8 @@
 	<string name="product_search_add_product">Add Product</string>
 	<string name="product_search_add_shop">Add Shop</string>
 	<string name="main_search_button">Search Products</string>
+	<string name="product_add_take_picture_button">Take Picture</string>
+	<string name="product_add_name_view">Product Name</string>
+	<string name="product_add_add_button">Add Product</string>
 	
 </resources>
