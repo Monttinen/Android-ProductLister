@@ -35,6 +35,7 @@
 
     <EditText
         android:id="@+id/editText1"
+        android:hint="@string/product_add_price_product_hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/textView2"

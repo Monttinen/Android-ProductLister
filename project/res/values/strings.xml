@@ -19,5 +19,10 @@
 	<string name="product_add_price_shop">Selected Shop:</string>
 	<string name="unit_price">Unit Price</string>
 	<string name="quantity_price">Quantity Price</string>
+	<string name="product_name_hint">Name of the product you are adding</string>
+	<string name="product_search_hint">Name of the product you are looking for</string>
+	<string name="product_add_price_product_hint">Look for the product to add the price to</string>
+	<string name="product_add_price_unit_hint">Unit price of selected product</string>
+	<string name="product_add_price_quantity_hint">Selected products kg/liter price</string>
 	
 </resources>
