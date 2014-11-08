@@ -76,6 +76,7 @@ CREATE TABLE IF NOT EXISTS `productdb`.`Shop_has_Product` (
   `Product_idProduct` INT NOT NULL,
   `UnitPrice` DOUBLE NULL,
   `QuantityPrice` DOUBLE NULL,
+  `dateReported` date DEFAULT NULL,
   PRIMARY KEY (`Shop_idShop`, `Product_idProduct`),
   INDEX `fk_Shop_has_Product_Product1_idx` (`Product_idProduct` ASC),
   INDEX `fk_Shop_has_Product_Shop1_idx` (`Shop_idShop` ASC),
