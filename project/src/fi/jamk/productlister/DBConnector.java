@@ -6,72 +6,85 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 
-
 import org.json.*;
 
 public class DBConnector {
 	private String server;
-	
-	public DBConnector(){
+
+	public DBConnector() {
 		server = "http://128.199.60.131/";
 	}
-	
-	public ArrayList<Product> searchProducts(String keyword) throws IOException, JSONException{
+
+	public ArrayList<Product> searchProducts(String keyword) {
 		ArrayList<Product> results = new ArrayList<Product>();
-		if(keyword.length()<1){
+		if (keyword.length() < 1) {
 			return results;
 		}
-		
+
 		String responseString;
-		
+
 		// Get data string
 		String url = server + "searchproduct.php?keyword=" + keyword;
-	    responseString = getPage(url);
-	    
-	    // parse json and return arraylist
-		JSONObject json = new JSONObject(responseString);
-		if(json.getBoolean("Success")==true){
-			JSONArray products = json.getJSONArray("Products");
-			for(int i=0; i< products.length(); i++){
-				JSONObject p = products.getJSONObject(i);
-				results.add(new Product(p.getInt("idProduct"),
-										p.getInt("ProductCategoryId"),
-										p.getString("ProductName"),
-										p.getString("ProductBarcode")
-						));
+		responseString = getPage(url);
+
+		// parse json and return arraylist
+		JSONObject json;
+		try {
+			json = new JSONObject(responseString);
+			if (json.getBoolean("Success") == true) {
+				JSONArray products = json.getJSONArray("Products");
+				for (int i = 0; i < products.length(); i++) {
+					JSONObject p = products.getJSONObject(i);
+					results.add(new Product(p.getInt("idProduct"), p
+							.getInt("ProductCategoryId"), p
+							.getString("ProductName"), p
+							.getString("ProductBarcode")));
+				}
 			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
-		// dummy data:
-		/*results.add(new Product(1, 1, "testiolut", "bar1"));
-		results.add(new Product(2, 1, "testiolut2", "bar2"));
-		results.add(new Product(3, 1, "testiolut3", "bar3"));
-		results.add(new Product(4, 1, "testiolut4", "bar4"));*/
-		
 		return results;
 	}
-	
-	private String getPage(String url) throws MalformedURLException, IOException {
-	    HttpURLConnection con = (HttpURLConnection) new URL(url).openConnection();
-	    con.connect();
 
-	    if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
-	        return inputStreamToString(con.getInputStream());
-	    } else {
-	        return null;
-	    }
+	private String getPage(String url) {
+		HttpURLConnection con = null;
+		try {
+			con = (HttpURLConnection) new URL(url).openConnection();
+			con.connect();
+
+			if (con.getResponseCode() == HttpURLConnection.HTTP_OK) {
+				return inputStreamToString(con.getInputStream());
+			} else {
+				return null;
+			}
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
-	private String inputStreamToString(InputStream in) throws IOException {
-	    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(in));
-	    StringBuilder stringBuilder = new StringBuilder();
-	    String line = null;
+	private String inputStreamToString(InputStream in) {
+		BufferedReader bufferedReader = new BufferedReader(
+				new InputStreamReader(in));
+		StringBuilder stringBuilder = new StringBuilder();
+		String line = null;
 
-	    while ((line = bufferedReader.readLine()) != null) {
-	        stringBuilder.append(line + "\n");
-	    }
+		try {
+			while ((line = bufferedReader.readLine()) != null) {
+				stringBuilder.append(line + "\n");
+			}
+			bufferedReader.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-	    bufferedReader.close();
-	    return stringBuilder.toString();
+		return stringBuilder.toString();
 	}
 }
