@@ -6,44 +6,32 @@
     <!-- SurfaceView no tested, after testing will know if it is what we want -->
     
     
-    
-    <Button
-        android:id="@+id/product_add_addbutton"
+	<SurfaceView
+        android:id="@+id/surfaceView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/product_add_add_button" />
-
+        android:layout_above="@+id/take_picture"
+	/>
+    
     <Button
         android:id="@+id/take_picture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/product_add_addbutton"
-        android:layout_below="@+id/surfaceView1"
+        android:layout_above="@+id/product_add_name_text"
         android:text="@string/product_add_take_picture_button" />
-
-    <Spinner
-        android:id="@+id/product_add_subcategory"
+	
+    <TextView
+        android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/product_add_category"
-        android:layout_alignParentLeft="true" />
-
-    <Spinner
-        android:id="@+id/product_add_category"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/product_add_addbutton"
-        android:layout_alignParentLeft="true" />
-
-    <SurfaceView
-        android:id="@+id/surfaceView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
-
+        android:layout_alignBaseline="@+id/product_add_name_text"
+        android:layout_alignBottom="@+id/product_add_name_text"
+        android:layout_toLeftOf="@+id/product_add_addbutton"
+        android:text="@string/product_add_name_view" />
+	
     <EditText
         android:id="@+id/product_add_name_text"
         android:hint="@string/product_name_hint"
@@ -53,13 +41,32 @@
         android:layout_alignParentRight="true"
         android:ems="10" />
 
-    <TextView
-        android:id="@+id/textView1"
+    <Spinner
+        android:id="@+id/product_add_subcategory"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_marginLeft="30dp"
+		android:layout_marginRight="30dp"
+        android:layout_above="@+id/product_add_category"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentLeft="true" />
+
+    <Spinner
+        android:id="@+id/product_add_category"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+		android:layout_marginLeft="30dp"
+		android:layout_marginRight="30dp"
+        android:layout_above="@+id/product_add_addbutton"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentLeft="true" />
+		
+    <Button
+        android:id="@+id/product_add_addbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/product_add_name_text"
-        android:layout_alignBottom="@+id/product_add_name_text"
-        android:layout_toLeftOf="@+id/product_add_addbutton"
-        android:text="@string/product_add_name_view" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:text="@string/product_add_add_button" />
 
 </RelativeLayout>
