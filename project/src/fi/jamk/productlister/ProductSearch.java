@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -31,13 +32,21 @@ public class ProductSearch extends Activity implements OnClickListener {
 
 		Button searchButton = (Button) findViewById(R.id.product_search_search);
 		searchButton.setOnClickListener(this);
-		
+
 		Button addProductButton = (Button) findViewById(R.id.product_search_add_product);
 		addProductButton.setOnClickListener(this);
-		
+
 		Button addShopButton = (Button) findViewById(R.id.product_search_add_shop);
 		addShopButton.setOnClickListener(this);
-		
+
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		startActivity(new Intent(getApplicationContext(), MainActivity.class));
+		return true;
 	}
 
 	public void onClick(View v) {
@@ -71,12 +80,12 @@ public class ProductSearch extends Activity implements OnClickListener {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		//TODO custom list item with more info?
 		ArrayAdapter<Product> newadapter = new ArrayAdapter<Product>(ProductSearch.this,
 				android.R.layout.simple_list_item_1, productlist);
 		listViewProducts.setAdapter(newadapter);
-		
+
 	}
 
 	private class SearchProducts extends AsyncTask<String, Void, ArrayList<Product>> {
