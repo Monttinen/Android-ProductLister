@@ -63,3 +63,4 @@ proguard/
 # Log Files
 *.log
 /project/nbandroid/
+*/private/*
