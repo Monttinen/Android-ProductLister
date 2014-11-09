@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -14,7 +15,7 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class ProductSearch extends Activity {
+public class ProductSearch extends Activity implements OnClickListener {
 
 	private DBConnector db;
 	private ArrayList<Product> productlist;
@@ -29,32 +30,53 @@ public class ProductSearch extends Activity {
 		listViewProducts = (ListView) findViewById(R.id.product_search_listview);
 
 		Button searchButton = (Button) findViewById(R.id.product_search_search);
+		searchButton.setOnClickListener(this);
+		
+		Button addProductButton = (Button) findViewById(R.id.product_search_add_product);
+		addProductButton.setOnClickListener(this);
+		
+		Button addShopButton = (Button) findViewById(R.id.product_search_add_shop);
+		addShopButton.setOnClickListener(this);
+		
+	}
 
-		searchButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				EditText textField = (EditText) findViewById(R.id.product_search_textfield);
-				String keyword = textField.getText().toString();
+	public void onClick(View v) {
+		switch (v.getId()) {
+			case R.id.product_search_search:
+				searchClicked();
+				break;
+			case R.id.product_search_add_product:
+				startActivity(new Intent(this, ProductAdd.class));
+				break;
+			case R.id.product_search_add_shop:
+				// TODO
+				break;
+		}
+	}
 
-				SearchProducts search = new SearchProducts();
-				search.execute(keyword);
+	private void searchClicked() {
 
-				try {
-					productlist = search.get();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (ExecutionException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				ArrayAdapter<Product> newadapter = new ArrayAdapter<Product>(ProductSearch.this,
-						android.R.layout.simple_list_item_1, productlist);
-				listViewProducts.setAdapter(newadapter);
+		EditText textField = (EditText) findViewById(R.id.product_search_textfield);
+		String keyword = textField.getText().toString();
 
-			}
-		});
+		SearchProducts search = new SearchProducts();
+		search.execute(keyword);
 
+		try {
+			productlist = search.get();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//TODO custom list item with more info?
+		ArrayAdapter<Product> newadapter = new ArrayAdapter<Product>(ProductSearch.this,
+				android.R.layout.simple_list_item_1, productlist);
+		listViewProducts.setAdapter(newadapter);
+		
 	}
 
 	private class SearchProducts extends AsyncTask<String, Void, ArrayList<Product>> {

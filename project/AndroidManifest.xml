@@ -25,7 +25,22 @@
         <activity 
             android:name=".ProductSearch"
             android:label="@string/product_search">
-            
+        </activity>
+		<activity 
+            android:name=".ProductAdd"
+            android:label="@string/product_add">
+        </activity>
+		<activity 
+            android:name=".ProductAddPrice1"
+            android:label="@string/product_add_price1">
+        </activity>
+		<activity 
+            android:name=".ProductAddPrice2"
+            android:label="@string/product_add_price1">
+        </activity>
+		<activity 
+            android:name=".ProductAddPrice3"
+            android:label="@string/product_add_price1">
         </activity>
     </application>
 
