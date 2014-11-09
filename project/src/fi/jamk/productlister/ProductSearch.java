@@ -70,7 +70,7 @@ public class ProductSearch extends Activity implements OnClickListener {
 		EditText textField = (EditText) findViewById(R.id.product_search_textfield);
 		String keyword = textField.getText().toString();
 
-		SearchProducts search = new SearchProducts();
+		SearchProductsTask search = new SearchProductsTask();
 		search.execute(keyword);
 
 		try {
@@ -90,7 +90,7 @@ public class ProductSearch extends Activity implements OnClickListener {
 
 	}
 
-	private class SearchProducts extends AsyncTask<String, Void, ArrayList<Product>> {
+	private class SearchProductsTask extends AsyncTask<String, Void, ArrayList<Product>> {
 
 		@Override
 		protected void onPreExecute() {

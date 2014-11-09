@@ -29,4 +29,9 @@ public class Category {
 	public int getCategoryId(){
 		return idCategory;
 	}
+	
+	@Override
+	public String toString(){
+		return CategoryName;
+	}
 }
