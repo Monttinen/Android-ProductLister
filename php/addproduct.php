@@ -37,6 +37,8 @@ try {
 		$Image = null;
 	}
 	
+	// Do query as transaction. If image upload fails we can rollback.
+	$db->beginTransaction();
 	$sql = "INSERT INTO Product (ProductName, ProductCategoryId, ProductBarcode) VALUES(?, ?, ?);";
 	$ps = $db->prepare($sql);
 	$result = $ps->execute(array($ProductName, $ProductCategoryId, $ProductBarcode));
@@ -66,8 +68,13 @@ try {
 		move_uploaded_file($Image['tmp_name'], $targetFileName);
 		
 	} catch (Exception $ex) {
+		// Image was not uploaded so dont send to database either.
+		$db->rollBack();
 		throw $ex;
 	}
+	
+	// All is well and we can live.
+	$db->commit();
 	$response['Success'] = true;
 } catch (Exception $ex) {
 	$response['Success'] = false;
