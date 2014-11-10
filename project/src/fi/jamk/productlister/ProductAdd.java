@@ -4,8 +4,11 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import java.util.ArrayList;
@@ -15,12 +18,13 @@ import java.util.logging.Logger;
 
 /**
  *
- * @author Monttinen
+ * @author Monttinen & Zamess
  */
-public class ProductAdd extends Activity {
+public class ProductAdd extends Activity implements View.OnClickListener{
 	private DBConnector db;
 	private ArrayList<Category> categories;
 	private Spinner categorySpinner;
+	
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,6 +33,8 @@ public class ProductAdd extends Activity {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		db = new DBConnector();
 		categories = new ArrayList<Category>();
+		((Button)findViewById(R.id.take_picture)).setOnClickListener(this);
+
 		
 		categorySpinner = (Spinner) findViewById(R.id.product_add_category);
 		
@@ -58,6 +64,18 @@ public class ProductAdd extends Activity {
 
 	}
 	
+	
+	
+	static final int REQUEST_IMAGE_CAPTURE = 1;
+	
+	private void dispatchTakePictureIntent() {
+	    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+	    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+	        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+	    }
+	}
+	
+	
 	private class GetCategoriesTask  extends AsyncTask<Integer, Void, ArrayList<Category>> {
 
 		@Override
@@ -69,5 +87,17 @@ public class ProductAdd extends Activity {
 			}
 		}
 		
+	}
+
+
+	@Override
+	public void onClick(View v) {
+		switch(v.getId()){
+		case R.id.take_picture:
+			dispatchTakePictureIntent();
+			break;
+
+		
+		}
 	}
 }
