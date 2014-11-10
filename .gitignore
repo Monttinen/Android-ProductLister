@@ -1,5 +1,7 @@
 *Thumbs.db
 
+*DB_config.php
+
 # Created by https://www.gitignore.io
 
 ### Eclipse ###
@@ -64,3 +66,4 @@ proguard/
 *.log
 /project/nbandroid/
 */private/*
+*nbproject*
