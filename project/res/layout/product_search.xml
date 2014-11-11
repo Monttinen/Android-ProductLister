@@ -13,7 +13,6 @@
         android:layout_toLeftOf="@+id/product_search_search"
         android:ems="10" >
 
-        <requestFocus />
     </EditText>
 
     <Button
