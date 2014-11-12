@@ -5,16 +5,6 @@
 
     <!-- SurfaceView no tested, after testing will know if it is what we want -->
     
-    
-	<SurfaceView
-        android:id="@+id/surfaceView1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_above="@+id/take_picture"
-	/>
-    
     <Button
         android:id="@+id/take_picture"
         android:layout_width="wrap_content"
@@ -40,26 +30,6 @@
         android:layout_above="@+id/product_add_subcategory"
         android:layout_alignParentRight="true"
         android:ems="10" />
-
-    <Spinner
-        android:id="@+id/product_add_subcategory"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-		android:layout_marginLeft="30dp"
-		android:layout_marginRight="30dp"
-        android:layout_above="@+id/product_add_category"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentLeft="true" />
-
-    <Spinner
-        android:id="@+id/product_add_category"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-		android:layout_marginLeft="30dp"
-		android:layout_marginRight="30dp"
-        android:layout_above="@+id/product_add_addbutton"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentLeft="true" />
 		
     <Button
         android:id="@+id/product_add_addbutton"
@@ -68,5 +38,27 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:text="@string/product_add_add_button" />
+
+    <Spinner
+        android:id="@+id/product_add_category"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/product_add_addbutton"
+        android:layout_alignParentLeft="true" />
+
+    <Spinner
+        android:id="@+id/product_add_subcategory"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/product_add_category"
+        android:layout_alignParentLeft="true" />
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/preview" />
 
 </RelativeLayout>

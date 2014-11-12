@@ -33,6 +33,7 @@
             android:label="@string/product_search">
         </activity>
 		<activity 
+		    android:windowSoftInputMode="stateUnchanged"
             android:name=".ProductAdd"
             android:label="@string/product_add">
         </activity>
