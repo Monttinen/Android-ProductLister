@@ -2,6 +2,7 @@ package fi.jamk.productlister;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -9,7 +10,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Spinner;
+
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
@@ -23,6 +26,7 @@ public class ProductAdd extends Activity implements View.OnClickListener{
 	private DBConnector db;
 	private ArrayList<Category> categories;
 	private Spinner categorySpinner;
+	
 	
 
 	@Override
@@ -67,12 +71,25 @@ public class ProductAdd extends Activity implements View.OnClickListener{
 	
 	static final int REQUEST_IMAGE_CAPTURE = 1;
 	
-	private void dispatchTakePictureIntent() {
+	private void TakePicture() {
 	    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 	    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
 	        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
 	    }
 	}
+	
+	
+	
+	@Override
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	    if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+	        Bundle extras = data.getExtras();
+	        Bitmap imageBitmap = (Bitmap) extras.get("data");
+	        ImageView picture = (ImageView) findViewById(R.id.camera_preview);
+	        picture.setImageBitmap(imageBitmap);
+	    }
+	}
+	
 	
 	
 	private class GetCategoriesTask  extends AsyncTask<Integer, Void, ArrayList<Category>> {
@@ -93,7 +110,7 @@ public class ProductAdd extends Activity implements View.OnClickListener{
 	public void onClick(View v) {
 		switch(v.getId()){
 		case R.id.take_picture:
-			dispatchTakePictureIntent();
+			TakePicture();
 			break;
 
 		
