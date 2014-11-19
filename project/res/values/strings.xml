@@ -16,7 +16,7 @@
 	<!-- Product Search -->
 	<string name="product_search_search">Search</string>
 	<string name="product_search_add_product">Add Product</string>
-	<string name="product_search_add_shop">Add Shop</string>
+	<string name="add_shop">Add Shop</string>
 	<string name="product_search_hint">Name of the product you are looking for</string>
 	
 	<!-- Product Add -->
@@ -37,5 +37,9 @@
 	<string name="product_add_price_unit_hint">Unit price of selected product</string>
 	<string name="product_add_price_quantity_hint">Selected products kg/liter price</string>
 	<string name="add_price">Add Price</string>
+	<string name="shop_name">Shop Name</string>
+	<string name="shop_address">Shop Address</string>
+	<string name="shop_location">Shop Location</string>
+	<string name="get_from_map">Get From Map</string>
 	
 </resources>
