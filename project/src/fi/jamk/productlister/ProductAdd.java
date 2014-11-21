@@ -13,11 +13,15 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 /**
  *
@@ -30,6 +34,7 @@ public class ProductAdd extends Activity implements View.OnClickListener, Adapte
 	private ArrayList<Category> subCategories;
 	private Spinner categorySpinner;
 	private Spinner subCategorySpinner;
+	private TextView name;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +50,8 @@ public class ProductAdd extends Activity implements View.OnClickListener, Adapte
 
 		categorySpinner = (Spinner) findViewById(R.id.product_add_category);
 		subCategorySpinner = (Spinner) findViewById(R.id.product_add_subcategory);
+
+		name = (TextView) findViewById(R.id.product_add_name_text);
 
 		categorySpinner.setOnItemSelectedListener(this);
 
@@ -151,9 +158,47 @@ public class ProductAdd extends Activity implements View.OnClickListener, Adapte
 
 	}
 
-	private void addProduct() {
-		int category;
+	private int getSelectedCategory() {
+		int selectedCategory = 0;
+		Category c;
+		if (subCategories.size() > 0) {
+			c = (Category) subCategorySpinner.getSelectedItem();
+		} else {
+			c = (Category) categorySpinner.getSelectedItem();
+		}
 
+		selectedCategory = c.getCategoryId();
+		return selectedCategory;
+	}
+
+	private void addProduct() {
+		try {
+			String input = name.getText().toString();
+			String[] inputLines = input.split("\n");
+			String productName = inputLines[0];
+			
+			if (productName.length() < 1 || productName.length() > 255) {
+				Toast.makeText(getApplicationContext(), "Product name is not valid.", Toast.LENGTH_SHORT).show();
+				return;
+			}
+			
+			int productCategoryId = getSelectedCategory();
+			
+			AddProductTask task = new AddProductTask();
+			task.execute(new Product(0, productCategoryId, productName, ""));
+			JSONArray result = task.get();
+			if(result.getJSONObject(0).getString("success").equals("0")){
+				Toast.makeText(getApplicationContext(), "Error adding product: "+result.getJSONObject(0).getString("message"), Toast.LENGTH_LONG).show();
+			} else {
+				Toast.makeText(getApplicationContext(), "Added product: "+productName, Toast.LENGTH_SHORT).show();
+			}
+		} catch (InterruptedException ex) {
+			Logger.getLogger(ProductAdd.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (ExecutionException ex) {
+			Logger.getLogger(ProductAdd.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (JSONException ex) {
+			Logger.getLogger(ProductAdd.class.getName()).log(Level.SEVERE, null, ex);
+		}
 	}
 
 	@Override
@@ -166,6 +211,15 @@ public class ProductAdd extends Activity implements View.OnClickListener, Adapte
 				addProduct();
 				break;
 
+		}
+	}
+
+	private class AddProductTask extends AsyncTask<Product, Void, JSONArray> {
+
+		@Override
+		protected JSONArray doInBackground(Product... params) {
+			JSONArray result = db.addProduct(params[0]);
+			return result;
 		}
 	}
 }
