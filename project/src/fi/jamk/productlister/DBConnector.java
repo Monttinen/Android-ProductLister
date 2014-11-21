@@ -78,7 +78,7 @@ public class DBConnector {
 	 * @return ArrayList<Category>
 	 */
 	public ArrayList<Category> getCategories() {
-		return getCategories(-1);
+		return getCategories(0);
 	}
 
 	/**
@@ -119,7 +119,7 @@ public class DBConnector {
 					try {
 						parentId = Integer.parseInt(pId);
 					} catch (NumberFormatException e) {
-						parentId = -1;
+						parentId = 0;
 					}
 					results.add(new Category(id, name, parentId, desc));
 				}
