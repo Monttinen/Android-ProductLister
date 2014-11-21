@@ -38,6 +38,8 @@ public class ProductSearch extends Activity implements OnClickListener {
 
 		Button addShopButton = (Button) findViewById(R.id.product_search_add_shop);
 		addShopButton.setOnClickListener(this);
+		
+		
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -60,7 +62,7 @@ public class ProductSearch extends Activity implements OnClickListener {
 				startActivity(new Intent(this, ProductAdd.class));
 				break;
 			case R.id.product_search_add_shop:
-				// TODO
+				startActivity(new Intent(this, ShopAdd.class));
 				break;
 		}
 	}

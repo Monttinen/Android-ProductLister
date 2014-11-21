@@ -16,6 +16,7 @@ public class MainActivity extends Activity implements View.OnClickListener{
         setContentView(R.layout.activity_main);
 		((Button)findViewById(R.id.main_button_search)).setOnClickListener(this);
 		((Button)findViewById(R.id.main_button_add_product)).setOnClickListener(this);
+		((Button)findViewById(R.id.main_button_add_shop)).setOnClickListener(this);
 		
     }
 
@@ -48,6 +49,10 @@ public class MainActivity extends Activity implements View.OnClickListener{
 			
 			case R.id.main_button_add_product:
 				startActivity(new Intent(this, ProductAdd.class));
+				break;
+				
+			case R.id.main_button_add_shop:
+				startActivity(new Intent(this, ShopAdd.class));
 				break;
 		}
 	}
