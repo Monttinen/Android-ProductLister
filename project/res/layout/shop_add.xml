@@ -4,7 +4,7 @@
     android:layout_height="match_parent" >
 
     <EditText
-        android:id="@+id/editText1"
+        android:id="@+id/editTextName"
         android:hint="@string/shop_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -24,21 +24,21 @@
         android:text="@string/add_shop" />
 
     <EditText
-        android:id="@+id/editText2"
+        android:id="@+id/editTextAddress"
         android:hint="@string/shop_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/editText1"
+        android:layout_below="@+id/editTextName"
         android:ems="10"
         android:inputType="textPostalAddress" />
 
     <EditText
-        android:id="@+id/editText3"
+        android:id="@+id/editTextLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/editText2"
+        android:layout_below="@+id/editTextAddress"
         android:ems="10"
         android:hint="@string/shop_location" >
 

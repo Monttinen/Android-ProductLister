@@ -31,9 +31,9 @@ public class ShopAdd extends Activity implements View.OnClickListener {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		((Button) findViewById(R.id.shop_add_addbutton)).setOnClickListener(this);
-	//	name = (EditText)findViewById(R.id.name);  
-		
-		
+		txtShopName = (EditText) findViewById(R.id.editTextName);  
+		txtShopAddress = (EditText) findViewById(R.id.editTextAddress);  
+		txtShopLocation = (EditText) findViewById(R.id.editTextLocation);  
 
 
 }
