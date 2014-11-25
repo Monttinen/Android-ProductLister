@@ -35,6 +35,8 @@ public class ProductAdd extends Activity implements View.OnClickListener, Adapte
 	private Spinner categorySpinner;
 	private Spinner subCategorySpinner;
 	private TextView name;
+	
+	static final int REQUEST_IMAGE_CAPTURE = 1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -86,8 +88,6 @@ public class ProductAdd extends Activity implements View.OnClickListener, Adapte
 		return true;
 
 	}
-
-	static final int REQUEST_IMAGE_CAPTURE = 1;
 
 	private void TakePicture() {
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
