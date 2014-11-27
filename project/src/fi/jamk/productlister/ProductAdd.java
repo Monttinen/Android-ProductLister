@@ -3,8 +3,10 @@ package fi.jamk.productlister;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,10 +18,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -35,7 +42,11 @@ public class ProductAdd extends Activity implements View.OnClickListener, Adapte
 	private Spinner categorySpinner;
 	private Spinner subCategorySpinner;
 	private TextView name;
-
+	
+	static final int REQUEST_IMAGE_CAPTURE = 1;
+	static final int REQUEST_TAKE_PHOTO = 1;
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -87,8 +98,6 @@ public class ProductAdd extends Activity implements View.OnClickListener, Adapte
 
 	}
 
-	static final int REQUEST_IMAGE_CAPTURE = 1;
-
 	private void TakePicture() {
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -106,6 +115,56 @@ public class ProductAdd extends Activity implements View.OnClickListener, Adapte
 		}
 	}
 
+	
+	String mCurrentPhotoPath;
+
+	private File createImageFile() throws IOException {
+	    // Create an image file name
+	    String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+	    String imageFileName = "JPEG_" + timeStamp + "_";
+	    File storageDir = Environment.getExternalStoragePublicDirectory(
+	            Environment.DIRECTORY_PICTURES);
+	    File image = File.createTempFile(
+	        imageFileName,  /* prefix */
+	        ".jpg",         /* suffix */
+	        storageDir      /* directory */
+	    );
+
+	    // Save a file: path for use with ACTION_VIEW intents
+	    mCurrentPhotoPath = "file:" + image.getAbsolutePath();
+	    return image;
+	}
+	
+	
+
+//TODO
+	private void dispatchTakePictureIntent() {
+	    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+	    // Ensure that there's a camera activity to handle the intent
+	    if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+	        // Create the File where the photo should go
+	        File photoFile = null;
+	        try {
+	            photoFile = createImageFile();
+	        } catch (IOException ex) {
+	            // Error occurred while creating the File
+	          
+	        }
+	        // Continue only if the File was successfully created
+	        if (photoFile != null) {
+	            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT,
+	                    Uri.fromFile(photoFile));
+	            startActivityForResult(takePictureIntent, REQUEST_TAKE_PHOTO);
+	        }
+	    }
+	}
+	
+	
+	
+	
+	
+	
+	
 	public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
 		switch (parent.getId()) {
 			case R.id.product_add_category:
