@@ -25,6 +25,7 @@ public class DBConnector {
 	 */
 	public DBConnector() {
 		server = "http://128.199.60.131:8080/data/";
+		//server = "http://10.0.2.2:8080/data/";
 	}
 
 	/**
@@ -50,16 +51,16 @@ public class DBConnector {
 		JSONObject json;
 		try {
 			json = new JSONObject(responseString);
-			if (json.getString("Success").equals("1")) {
-				JSONArray products = json.getJSONArray("Products");
+			if (json.getString("success").equals("1")) {
+				JSONArray products = json.getJSONArray("products");
 				for (int i = 0; i < products.length(); i++) {
 					JSONObject p = products.getJSONObject(i);
 
 					// Some of these can be null!
-					int id = p.getInt("idProduct");
-					int catId = p.getInt("ProductCategoryId");
-					String name = p.getString("ProductName");
-					String bar = p.getString("ProductBarcode");
+					int id = p.getInt("productId");
+					int catId = p.getInt("productCategoryId");
+					String name = p.getString("productName");
+					String bar = p.getString("productBarcode");
 
 					results.add(new Product(id, catId, name, bar));
 				}
@@ -105,16 +106,16 @@ public class DBConnector {
 		JSONObject json;
 		try {
 			json = new JSONObject(responseString);
-			if (json.getString("Success").equals("1")) {
-				JSONArray products = json.getJSONArray("Categories");
+			if (json.getString("success").equals("1")) {
+				JSONArray products = json.getJSONArray("categories");
 				for (int i = 0; i < products.length(); i++) {
 					JSONObject p = products.getJSONObject(i);
 
 					// Some of these can be null!
-					int id = p.getInt("idCategory");
-					String name = p.getString("CategoryName");
-					String pId = p.getString("CategoryParentId");
-					String desc = p.getString("CategoryDescription");
+					int id = p.getInt("categoryId");
+					String name = p.getString("categoryName");
+					String pId = p.getString("categoryParentId");
+					String desc = p.getString("categoryDescription");
 					int parentId;
 					try {
 						parentId = Integer.parseInt(pId);
@@ -136,9 +137,9 @@ public class DBConnector {
 
 		try {
 			JSONObject json = new JSONObject();
-			json.put("ProductName", p.getProductName());
-			json.put("ProductCategoryId", p.getProductCategoryId());
-			json.put("ProductBarcode", p.getProductBarcode());
+			json.put("productName", p.getProductName());
+			json.put("productCategoryId", p.getProductCategoryId());
+			json.put("productBarcode", p.getProductBarcode());
 
 			result = makeRequest(server+"addproduct", json);
 
