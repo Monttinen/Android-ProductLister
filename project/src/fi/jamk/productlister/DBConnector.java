@@ -25,6 +25,7 @@ public class DBConnector {
 	 */
 	public DBConnector() {
 		server = "http://128.199.60.131:8080/data/";
+		//server = "http://10.0.2.2:8080/data/";
 	}
 
 	/**
@@ -50,16 +51,16 @@ public class DBConnector {
 		JSONObject json;
 		try {
 			json = new JSONObject(responseString);
-			if (json.getString("Success").equals("1")) {
-				JSONArray products = json.getJSONArray("Products");
+			if (json.getString("success").equals("1")) {
+				JSONArray products = json.getJSONArray("products");
 				for (int i = 0; i < products.length(); i++) {
 					JSONObject p = products.getJSONObject(i);
 
 					// Some of these can be null!
-					int id = p.getInt("idProduct");
-					int catId = p.getInt("ProductCategoryId");
-					String name = p.getString("ProductName");
-					String bar = p.getString("ProductBarcode");
+					int id = p.getInt("productId");
+					int catId = p.getInt("productCategoryId");
+					String name = p.getString("productName");
+					String bar = p.getString("productBarcode");
 
 					results.add(new Product(id, catId, name, bar));
 				}
@@ -105,16 +106,16 @@ public class DBConnector {
 		JSONObject json;
 		try {
 			json = new JSONObject(responseString);
-			if (json.getString("Success").equals("1")) {
-				JSONArray products = json.getJSONArray("Categories");
+			if (json.getString("success").equals("1")) {
+				JSONArray products = json.getJSONArray("categories");
 				for (int i = 0; i < products.length(); i++) {
 					JSONObject p = products.getJSONObject(i);
 
 					// Some of these can be null!
-					int id = p.getInt("idCategory");
-					String name = p.getString("CategoryName");
-					String pId = p.getString("CategoryParentId");
-					String desc = p.getString("CategoryDescription");
+					int id = p.getInt("categoryId");
+					String name = p.getString("categoryName");
+					String pId = p.getString("categoryParentId");
+					String desc = p.getString("categoryDescription");
 					int parentId;
 					try {
 						parentId = Integer.parseInt(pId);
@@ -130,17 +131,92 @@ public class DBConnector {
 		}
 		return results;
 	}
+	
+	public ArrayList<Price> getPrices(int shopId, int productId) throws Exception {
+		ArrayList<Price> results = new ArrayList<Price>();
+		String responseString;
 
+		if(shopId <= 0 && productId <= 0){
+			throw new Exception("shopId and productId cannot both be empty");
+		}
+		
+		responseString = getPage(server+"prices?shopId="+shopId+"&productId="+productId);
+
+		// parse json and return arraylist
+		JSONObject json;
+		try {
+			json = new JSONObject(responseString);
+			if (json.getString("success").equals("1")) {
+				JSONArray prices = json.getJSONArray("prices");
+				for (int i = 0; i < prices.length(); i++) {
+					JSONObject p = prices.getJSONObject(i);
+
+					// Some of these can be < 0.0 !
+					int id = p.getInt("idPrice");
+					int shopIdOut = p.getInt("shopId");
+					int productIdOut = p.getInt("productId");
+					double unitPrice = p.getDouble("unitPrice");
+					double quantityPrice = p.getDouble("quantityPrice");
+					
+					results.add(new Price(id, shopIdOut, productIdOut, unitPrice, quantityPrice));
+				}
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return results;
+	}
+	
 	public JSONArray addProduct(Product p) {
 		JSONArray result = new JSONArray();
 
 		try {
 			JSONObject json = new JSONObject();
-			json.put("ProductName", p.getProductName());
-			json.put("ProductCategoryId", p.getProductCategoryId());
-			json.put("ProductBarcode", p.getProductBarcode());
+			json.put("productName", p.getProductName());
+			json.put("productCategoryId", p.getProductCategoryId());
+			json.put("productBarcode", p.getProductBarcode());
 
 			result = makeRequest(server+"addproduct", json);
+
+		} catch (JSONException ex) {
+			Logger.getLogger(DBConnector.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return result;
+	}
+
+	public JSONArray addShop(Shop s) {
+		JSONArray result = new JSONArray();
+
+		try {
+			JSONObject json = new JSONObject();
+			json.put("shopName", s.getShopName());
+			json.put("shopAddress", s.getShopAdddress());
+			json.put("shopLocation", s.getShopLocation());
+
+			result = makeRequest(server+"addshop", json);
+
+		} catch (JSONException ex) {
+			Logger.getLogger(DBConnector.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return result;
+	}
+	
+		public JSONArray addPrice(Price p) {
+		JSONArray result = new JSONArray();
+
+		try {
+			JSONObject json = new JSONObject();
+			json.put("shopId", p.getShopId());
+			json.put("productId", p.getProductId());
+			json.put("unitPrice", p.getUnitPrice());
+			json.put("quantityPrice", p.getQuantityPrice());
+
+			result = makeRequest(server+"addprice", json);
 
 		} catch (JSONException ex) {
 			Logger.getLogger(DBConnector.class.getName()).log(Level.SEVERE, null, ex);
@@ -215,4 +291,5 @@ public class DBConnector {
 
 		return stringBuilder.toString();
 	}
+
 }

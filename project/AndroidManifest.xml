@@ -32,6 +32,7 @@
             </intent-filter>
         </activity>
         <activity 
+            android:windowSoftInputMode="stateUnchanged"
             android:name=".ProductSearch"
             android:label="@string/product_search"
             android:screenOrientation="portrait">
@@ -43,11 +44,12 @@
             android:screenOrientation="portrait">
         </activity>
 		<activity 
-            android:name=".ProductAddPrice1"
+            android:name=".PriceAdd"
             android:label="@string/product_add_price1"
             android:screenOrientation="portrait">
         </activity>
 		<activity 
+
             android:name=".ProductAddPrice2"
             android:label="@string/product_add_price1"
             android:screenOrientation="portrait">
@@ -58,6 +60,7 @@
             android:screenOrientation="portrait">
         </activity>
          <activity 
+
             android:name=".ShopAdd"
             android:label="@string/add_shop"
             android:screenOrientation="portrait">
