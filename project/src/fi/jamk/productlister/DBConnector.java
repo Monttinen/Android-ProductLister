@@ -140,7 +140,7 @@ public class DBConnector {
 			throw new Exception("shopId and productId cannot both be empty");
 		}
 		
-		responseString = getPage("prices?shopId="+shopId+"&productId="+productId);
+		responseString = getPage(server+"prices?shopId="+shopId+"&productId="+productId);
 
 		// parse json and return arraylist
 		JSONObject json;
@@ -152,7 +152,7 @@ public class DBConnector {
 					JSONObject p = prices.getJSONObject(i);
 
 					// Some of these can be < 0.0 !
-					int id = p.getInt("priceId");
+					int id = p.getInt("idPrice");
 					int shopIdOut = p.getInt("shopId");
 					int productIdOut = p.getInt("productId");
 					double unitPrice = p.getDouble("unitPrice");

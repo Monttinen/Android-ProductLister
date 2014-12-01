@@ -27,6 +27,12 @@
 		    android:layout_width="fill_parent"
 		    android:layout_height="wrap_content"
 		    android:text="@string/add_shop" />
+		
+		<Button
+		    android:id="@+id/main_button_add_price"
+		    android:layout_width="fill_parent"
+		    android:layout_height="wrap_content"
+		    android:text="@string/add_price" />
 
 	</LinearLayout>
 	
