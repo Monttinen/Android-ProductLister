@@ -2,8 +2,8 @@ package fi.jamk.productlister;
 
 public class Price {
 	private int idPrice;
-	private int idShop;
-	private int idProduct;
+	private int shopId;
+	private int productId;
 	
 	// Negative value if not available, but atleast one needs to be defined.
 	private double unitPrice;
@@ -20,8 +20,8 @@ public class Price {
 	 */
 	public Price(int idPrice, int idShop, int idProduct, double unitPrice, double quantityPrice) throws Exception {
 		this.idPrice = idPrice;
-		this.idShop = idShop;
-		this.idProduct = idProduct;
+		this.shopId = idShop;
+		this.productId = idProduct;
 		if(unitPrice<0 || quantityPrice < 0){
 			throw new Exception("Unit price and quantity price cannot be both null!");
 		}
@@ -33,12 +33,12 @@ public class Price {
 		return idPrice;
 	}
 
-	public int getIdShop() {
-		return idShop;
+	public int getShopId() {
+		return shopId;
 	}
 
-	public int getIdProduct() {
-		return idProduct;
+	public int getProductId() {
+		return productId;
 	}
 
 	public double getUnitPrice() {
@@ -51,6 +51,6 @@ public class Price {
 	
 	@Override
 	public String toString(){
-		return "Price of productId "+idProduct+" at shopId "+idShop+": "+"q:"+quantityPrice+" u:"+unitPrice;
+		return "Price of productId "+productId+" at shopId "+shopId+": "+"q:"+quantityPrice+" u:"+unitPrice;
 	}
 }

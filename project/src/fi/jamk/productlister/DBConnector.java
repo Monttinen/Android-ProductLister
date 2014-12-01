@@ -131,7 +131,43 @@ public class DBConnector {
 		}
 		return results;
 	}
+	
+	public ArrayList<Price> getPrices(int shopId, int productId) throws Exception {
+		ArrayList<Price> results = new ArrayList<Price>();
+		String responseString;
 
+		if(shopId <= 0 && productId <= 0){
+			throw new Exception("shopId and productId cannot both be empty");
+		}
+		
+		responseString = getPage("prices?shopId="+shopId+"&productId="+productId);
+
+		// parse json and return arraylist
+		JSONObject json;
+		try {
+			json = new JSONObject(responseString);
+			if (json.getString("success").equals("1")) {
+				JSONArray prices = json.getJSONArray("prices");
+				for (int i = 0; i < prices.length(); i++) {
+					JSONObject p = prices.getJSONObject(i);
+
+					// Some of these can be < 0.0 !
+					int id = p.getInt("priceId");
+					int shopIdOut = p.getInt("shopId");
+					int productIdOut = p.getInt("productId");
+					double unitPrice = p.getDouble("unitPrice");
+					double quantityPrice = p.getDouble("quantityPrice");
+					
+					results.add(new Price(id, shopIdOut, productIdOut, unitPrice, quantityPrice));
+				}
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return results;
+	}
+	
 	public JSONArray addProduct(Product p) {
 		JSONArray result = new JSONArray();
 
@@ -170,6 +206,26 @@ public class DBConnector {
 		return result;
 	}
 	
+		public JSONArray addPrice(Price p) {
+		JSONArray result = new JSONArray();
+
+		try {
+			JSONObject json = new JSONObject();
+			json.put("shopId", p.getShopId());
+			json.put("productId", p.getProductId());
+			json.put("unitPrice", p.getUnitPrice());
+			json.put("quantityPrice", p.getQuantityPrice());
+
+			result = makeRequest(server+"addprice", json);
+
+		} catch (JSONException ex) {
+			Logger.getLogger(DBConnector.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return result;
+	}
+
 	private String getPage(String url) {
 		HttpURLConnection con = null;
 		try {
