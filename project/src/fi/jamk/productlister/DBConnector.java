@@ -151,6 +151,25 @@ public class DBConnector {
 		return result;
 	}
 
+	public JSONArray addShop(Shop s) {
+		JSONArray result = new JSONArray();
+
+		try {
+			JSONObject json = new JSONObject();
+			json.put("shopName", s.getShopName());
+			json.put("shopAddress", s.getShopAdddress());
+			json.put("shopLocation", s.getShopLocation());
+
+			result = makeRequest(server+"addshop", json);
+
+		} catch (JSONException ex) {
+			Logger.getLogger(DBConnector.class.getName()).log(Level.SEVERE, null, ex);
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		return result;
+	}
+	
 	private String getPage(String url) {
 		HttpURLConnection con = null;
 		try {
@@ -216,4 +235,5 @@ public class DBConnector {
 
 		return stringBuilder.toString();
 	}
+
 }
