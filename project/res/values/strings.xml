@@ -41,5 +41,6 @@
 	<string name="shop_address">Shop Address</string>
 	<string name="shop_location">Shop Location</string>
 	<string name="get_from_map">Get From Map</string>
+	<string name="search_shop">Search for a shop</string>
 	
 </resources>

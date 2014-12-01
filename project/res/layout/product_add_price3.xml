@@ -73,7 +73,7 @@
         android:layout_height="wrap_content"
         android:layout_above="@+id/selected_shop_view"
         android:layout_alignParentRight="true"
-        android:text="TODO SELECTED PRODUCT"
+        android:text="PRODUCT"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <TextView
@@ -93,7 +93,7 @@
         android:layout_alignBaseline="@+id/selected_shop_view"
         android:layout_alignBottom="@+id/selected_shop_view"
         android:layout_alignParentRight="true"
-        android:text="TODO SELECTED SHOP"
+        android:text="SHOP"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <TextView

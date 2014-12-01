@@ -49,7 +49,6 @@
             android:screenOrientation="portrait">
         </activity>
 		<activity 
-
             android:name=".ProductAddPrice2"
             android:label="@string/product_add_price1"
             android:screenOrientation="portrait">

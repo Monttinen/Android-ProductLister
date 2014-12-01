@@ -51,10 +51,6 @@ public class ShopAdd extends Activity implements View.OnClickListener {
 	
 	private void addShop() {
 		/*
-		 * 
-		 * TEST TEST
-		 * 
-		 * 
 		try {
 			ShopName = txtShopName.getText().toString(); //setting Strings from EditTexts
 			ShopAddress = txtShopAddress.getText().toString();
