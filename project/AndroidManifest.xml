@@ -63,6 +63,11 @@
 			android:label="@string/add_shop"
 			android:screenOrientation="portrait">
 		</activity>
+		<activity 
+			android:name=".activities.ProductPrices"
+			android:label="@string/product_prices"
+			android:screenOrientation="portrait">
+		</activity>
 	</application>
 
 </manifest>
