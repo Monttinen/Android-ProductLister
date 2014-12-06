@@ -1,5 +1,6 @@
 package fi.jamk.productlister.db;
 
+import android.os.Environment;
 import fi.jamk.productlister.model.Category;
 import fi.jamk.productlister.model.Product;
 import fi.jamk.productlister.model.Price;
@@ -11,9 +12,16 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.ContentBody;
+import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 
@@ -335,4 +343,24 @@ public class DBConnector {
 		return stringBuilder.toString();
 	}
 
+	public boolean addProductImage(String imagePath, int productId) throws Exception {
+		File file = new File(Environment.getExternalStorageDirectory(), imagePath);
+		HttpClient httpclient = new DefaultHttpClient();
+
+		HttpPost httppost = new HttpPost(server + "upload");
+
+		MultipartEntityBuilder entityBuilder = MultipartEntityBuilder.create();
+
+		entityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+
+		/* example for adding an image part */
+		FileBody fileBody = new FileBody(file);
+		entityBuilder.addPart("file", fileBody);
+		entityBuilder.addTextBody("name", ""+productId);
+		HttpEntity entity = entityBuilder.build();
+		httppost.setEntity(entity);
+
+		HttpResponse response = httpclient.execute(httppost);
+		return true;
+	}
 }
