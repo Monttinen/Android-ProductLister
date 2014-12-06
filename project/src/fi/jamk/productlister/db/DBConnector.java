@@ -1,5 +1,9 @@
-package fi.jamk.productlister;
+package fi.jamk.productlister.db;
 
+import fi.jamk.productlister.model.Category;
+import fi.jamk.productlister.model.Product;
+import fi.jamk.productlister.model.Price;
+import fi.jamk.productlister.model.Shop;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;

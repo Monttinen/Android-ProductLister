@@ -1,5 +1,7 @@
-package fi.jamk.productlister;
+package fi.jamk.productlister.activities;
 
+import fi.jamk.productlister.db.DBConnector;
+import fi.jamk.productlister.model.Shop;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -16,6 +18,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+import fi.jamk.productlister.R;
 
 /**
  *

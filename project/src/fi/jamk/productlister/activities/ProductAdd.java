@@ -1,5 +1,8 @@
-package fi.jamk.productlister;
+package fi.jamk.productlister.activities;
 
+import fi.jamk.productlister.db.DBConnector;
+import fi.jamk.productlister.model.Product;
+import fi.jamk.productlister.model.Category;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+import fi.jamk.productlister.R;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package fi.jamk.productlister;
+package fi.jamk.productlister.model;
 
 public class Price {
 	private int idPrice;

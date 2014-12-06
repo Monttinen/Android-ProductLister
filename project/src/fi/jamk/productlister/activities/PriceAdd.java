@@ -1,5 +1,8 @@
-package fi.jamk.productlister;
+package fi.jamk.productlister.activities;
 
+import fi.jamk.productlister.db.DBConnector;
+import fi.jamk.productlister.model.Product;
+import fi.jamk.productlister.model.Price;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -7,6 +10,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import fi.jamk.productlister.R;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;

@@ -1,4 +1,4 @@
-package fi.jamk.productlister;
+package fi.jamk.productlister.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -7,6 +7,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import fi.jamk.productlister.R;
 
 public class MainActivity extends Activity implements View.OnClickListener {
 

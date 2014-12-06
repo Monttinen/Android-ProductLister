@@ -1,5 +1,7 @@
-package fi.jamk.productlister;
+package fi.jamk.productlister.activities;
 
+import fi.jamk.productlister.db.DBConnector;
+import fi.jamk.productlister.model.Product;
 import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
@@ -15,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
+import fi.jamk.productlister.R;
 
 public class ProductSearch extends Activity implements OnClickListener {
 
