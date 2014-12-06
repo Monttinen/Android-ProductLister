@@ -34,8 +34,9 @@ public class DBConnector {
 
 	/**
 	 * *
-	 * Get ArrayList of Products from database based on keyword.
-	 * categoryId is ignored if < 1
+	 * Get ArrayList of Products from database based on keyword. categoryId is
+	 * ignored if < 1
+	 *
 	 * @param keyword
 	 * @param categoryId
 	 * @return ArrayList<Product>
@@ -45,13 +46,13 @@ public class DBConnector {
 		if (keyword.length() < 1) {
 			return results;
 		}
-		if(categoryId<1){
+		if (categoryId < 1) {
 			categoryId = 0;
 		}
 		String responseString;
 
 		// Get data string
-		String url = server + "products?keyword=" + keyword+"&categoryId="+categoryId;
+		String url = server + "products?keyword=" + keyword + "&categoryId=" + categoryId;
 		responseString = getPage(url);
 
 		// parse json and return arraylist
@@ -138,16 +139,16 @@ public class DBConnector {
 		}
 		return results;
 	}
-	
+
 	public ArrayList<Price> getPrices(int shopId, int productId) throws Exception {
 		ArrayList<Price> results = new ArrayList<Price>();
 		String responseString;
 
-		if(shopId <= 0 && productId <= 0){
+		if (shopId <= 0 && productId <= 0) {
 			throw new Exception("shopId and productId cannot both be empty");
 		}
-		
-		responseString = getPage(server+"prices?shopId="+shopId+"&productId="+productId);
+
+		responseString = getPage(server + "prices?shopId=" + shopId + "&productId=" + productId);
 
 		// parse json and return arraylist
 		JSONObject json;
@@ -164,7 +165,7 @@ public class DBConnector {
 					int productIdOut = p.getInt("productId");
 					double unitPrice = p.getDouble("unitPrice");
 					double quantityPrice = p.getDouble("quantityPrice");
-					
+
 					results.add(new Price(id, shopIdOut, productIdOut, unitPrice, quantityPrice));
 				}
 			}
@@ -174,17 +175,16 @@ public class DBConnector {
 		}
 		return results;
 	}
-	
-	
-		public ArrayList<Shop> searchShops(String keyword) throws Exception {
+
+	public ArrayList<Shop> searchShops(String keyword) throws Exception {
 		ArrayList<Shop> results = new ArrayList<Shop>();
 		String responseString;
 
-		if(keyword.length() < 1){
+		if (keyword.length() < 1) {
 			throw new Exception("Need a keyword.");
 		}
-		
-		responseString = getPage(server+"searchshops?keyword="+keyword);
+
+		responseString = getPage(server + "searchshops?keyword=" + keyword);
 
 		// parse json and return arraylist
 		JSONObject json;
@@ -200,7 +200,7 @@ public class DBConnector {
 					String name = s.getString("shopName");
 					String address = s.getString("shopAddress");
 					String location = s.getString("shopLocation");
-					
+
 					results.add(new Shop(id, name, address, location));
 				}
 			}
@@ -210,7 +210,7 @@ public class DBConnector {
 		}
 		return results;
 	}
-	
+
 	public JSONArray addProduct(Product p) {
 		JSONArray result = new JSONArray();
 
@@ -220,7 +220,7 @@ public class DBConnector {
 			json.put("productCategoryId", p.getProductCategoryId());
 			json.put("productBarcode", p.getProductBarcode());
 
-			result = makeRequest(server+"addproduct", json);
+			result = makeRequest(server + "addproduct", json);
 
 		} catch (JSONException ex) {
 			Logger.getLogger(DBConnector.class.getName()).log(Level.SEVERE, null, ex);
@@ -239,7 +239,7 @@ public class DBConnector {
 			json.put("shopAddress", s.getShopAdddress());
 			json.put("shopLocation", s.getShopLocation());
 
-			result = makeRequest(server+"addshop", json);
+			result = makeRequest(server + "addshop", json);
 
 		} catch (JSONException ex) {
 			Logger.getLogger(DBConnector.class.getName()).log(Level.SEVERE, null, ex);
@@ -248,8 +248,8 @@ public class DBConnector {
 		}
 		return result;
 	}
-	
-		public JSONArray addPrice(Price p) {
+
+	public JSONArray addPrice(Price p) {
 		JSONArray result = new JSONArray();
 
 		try {
@@ -259,7 +259,7 @@ public class DBConnector {
 			json.put("unitPrice", p.getUnitPrice());
 			json.put("quantityPrice", p.getQuantityPrice());
 
-			result = makeRequest(server+"addprice", json);
+			result = makeRequest(server + "addprice", json);
 
 		} catch (JSONException ex) {
 			Logger.getLogger(DBConnector.class.getName()).log(Level.SEVERE, null, ex);
