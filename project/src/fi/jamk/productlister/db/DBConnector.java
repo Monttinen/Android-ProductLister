@@ -35,20 +35,23 @@ public class DBConnector {
 	/**
 	 * *
 	 * Get ArrayList of Products from database based on keyword.
-	 *
+	 * categoryId is ignored if < 1
 	 * @param keyword
+	 * @param categoryId
 	 * @return ArrayList<Product>
 	 */
-	public ArrayList<Product> searchProducts(String keyword) {
+	public ArrayList<Product> searchProducts(String keyword, int categoryId) {
 		ArrayList<Product> results = new ArrayList<Product>();
 		if (keyword.length() < 1) {
 			return results;
 		}
-
+		if(categoryId<1){
+			categoryId = 0;
+		}
 		String responseString;
 
 		// Get data string
-		String url = server + "products?keyword=" + keyword;
+		String url = server + "products?keyword=" + keyword+"&categoryId="+categoryId;
 		responseString = getPage(url);
 
 		// parse json and return arraylist

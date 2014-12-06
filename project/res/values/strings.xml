@@ -28,6 +28,7 @@
 	<!-- Product Add Price -->
 	<string name="select_product">Select Product</string>
 	<string name="product_add_price_product_hint">Look for the product to add the price to</string>
+	<string name="price_add_search">Search</string>
 	<string name="next_step">Next Step</string>
 	
 	<string name="product_add_price_product">Selected Product:</string>

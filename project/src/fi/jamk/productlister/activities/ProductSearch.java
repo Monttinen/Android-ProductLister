@@ -108,7 +108,7 @@ public class ProductSearch extends Activity implements OnClickListener {
 
 		@Override
 		protected ArrayList<Product> doInBackground(String... keyword) {
-			return db.searchProducts(keyword[0]);
+			return db.searchProducts(keyword[0], 0);
 		}
 
 		@Override

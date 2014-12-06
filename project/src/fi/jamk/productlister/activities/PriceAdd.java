@@ -1,10 +1,9 @@
 package fi.jamk.productlister.activities;
 
 import fi.jamk.productlister.db.DBConnector;
-import fi.jamk.productlister.model.Product;
-import fi.jamk.productlister.model.Price;
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -12,30 +11,35 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import fi.jamk.productlister.R;
 import fi.jamk.productlister.model.Category;
+import fi.jamk.productlister.model.Product;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import org.json.JSONArray;
 
 /**
  *
  * @author Antti Minkkinen
  */
-public class PriceAdd extends Activity implements View.OnClickListener, AdapterView.OnItemSelectedListener {
+public class PriceAdd extends Activity implements View.OnClickListener, AdapterView.OnItemSelectedListener, AdapterView.OnItemClickListener {
 
 	private DBConnector db;
 	private ArrayList<Category> categories;
 	private ArrayList<Category> subCategories;
+	private ArrayList<Product> products;
+	
 	private Spinner categorySpinner;
 	private Spinner subCategorySpinner;
 	private TextView name;
-
+	private ListView listViewProducts;
+	
+	private Product selectedProduct;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -44,17 +48,27 @@ public class PriceAdd extends Activity implements View.OnClickListener, AdapterV
 		
 		categories = new ArrayList<Category>();
 		subCategories = new ArrayList<Category>();
+		products = new ArrayList<Product>();
 		
 		categorySpinner = (Spinner) findViewById(R.id.price_add_category);
 		subCategorySpinner = (Spinner) findViewById(R.id.price_add_subcategory);
 		Button nextStep = (Button) findViewById(R.id.price_next_step_1);
+		Button search = (Button) findViewById(R.id.price_step_1_search);
+		listViewProducts = (ListView) findViewById(R.id.price_add_product_list);
 		name = (TextView) findViewById(R.id.price_add_name_text);
-
+		
 		categorySpinner.setOnItemSelectedListener(this);
+		listViewProducts.setOnItemClickListener(this);
 		nextStep.setOnClickListener(this);
-
+		search.setOnClickListener(this);
+		
+		listViewProducts.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+		listViewProducts.setItemsCanFocus(true);
+		
 		db = new DBConnector();
-		// TODO 1. fill category spinners
+		
+		selectedProduct = null;
+		
 		GetCategoriesTask gategoryTask = new GetCategoriesTask();
 		gategoryTask.execute();
 
@@ -76,11 +90,6 @@ public class PriceAdd extends Activity implements View.OnClickListener, AdapterV
 		} else {
 			subCategorySpinner.setVisibility(View.VISIBLE);
 		}
-		// TODO 2. implement search
-		// TODO 3. implement filling product list
-		// TODO 4. implement product selection and navigation to next step
-		// just for testing:
-		
 	}
 
 	@Override
@@ -97,12 +106,45 @@ public class PriceAdd extends Activity implements View.OnClickListener, AdapterV
 			case R.id.price_next_step_1:
 				nextStep1();
 				break;
+			case R.id.price_step_1_search:
+				searchProducts();
+				break;
 		}
 	}
-
+	
+	private void searchProducts() {
+		int categoryId = getSelectedCategory();
+		String keyword = name.getText().toString();
+		
+		SearchProductsTask task = new SearchProductsTask();
+		Object[] params = new Object[2];
+		params[0] = keyword;
+		params[1] = categoryId;
+		task.execute(params);
+		
+		try {
+			products = task.get();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		ArrayAdapter<Product> newadapter = new ArrayAdapter<Product>(PriceAdd.this,
+				android.R.layout.simple_list_item_1, products);
+		listViewProducts.setAdapter(newadapter);
+	}
+	
 	private void nextStep1() {
-		// TODO Check that a product has been selected.
-		startActivity(new Intent(this, PriceAdd2.class));
+		// Check that a product has been selected.
+		if(selectedProduct == null){
+			return;
+		}
+		Intent intent = new Intent(this, PriceAdd2.class);
+		intent.putExtra("selectedProductId", selectedProduct.getProductId());
+		startActivity(intent);
 	}
 	
 	
@@ -168,5 +210,21 @@ public class PriceAdd extends Activity implements View.OnClickListener, AdapterV
 
 		selectedCategory = c.getCategoryId();
 		return selectedCategory;
+	}
+	
+	private class SearchProductsTask extends AsyncTask<Object, Void, ArrayList<Product>> {
+		@Override
+		protected ArrayList<Product> doInBackground(Object... params) {
+			String keyword = (String) params[0];
+			int categoryId = (Integer) params[1];
+			return db.searchProducts(keyword, categoryId);
+		}
+	}
+	
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		if(parent.getId() == R.id.price_add_product_list){
+			selectedProduct = (Product) parent.getItemAtPosition(position);
+			listViewProducts.setItemChecked(position, true);
+		}
 	}
 }

@@ -34,31 +34,23 @@
 		android:layout_below="@+id/price_add_subcategory"
 		android:ems="10" />
 	
-	<TextView
-		android:id="@+id/label_search_product"
+	<Button
+		android:id="@+id/price_step_1_search"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignParentLeft="true"
 		android:layout_alignBaseline="@+id/price_add_name_text"
 		android:layout_alignBottom="@+id/price_add_name_text"
 		android:layout_toLeftOf="@+id/price_add_name_text"
-		android:text="@string/product_search" />
-
-
-	<LinearLayout
+		android:text="@string/price_add_search" />
+	
+	<ListView
+		android:id="@+id/price_add_product_list"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:orientation="vertical"
 		android:layout_below="@+id/price_add_name_text"
-		android:layout_centerHorizontal="true" >	
-		<ScrollView
-			android:id="@+id/price_add_product_list"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:layout_marginTop="20dp" >
-
-		</ScrollView>
-	</LinearLayout>
+		android:layout_marginTop="20dp" >
+	</ListView>
 
 	<Button
 		android:id="@+id/price_next_step_1"

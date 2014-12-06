@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import fi.jamk.productlister.R;
 
 /**
@@ -26,7 +27,15 @@ public class PriceAdd2 extends Activity implements View.OnClickListener {
 		Button nextStep2 = (Button) findViewById(R.id.price_next_step_2);
 		nextStep2.setOnClickListener(this);
 		
+		EditText shopName = (EditText) findViewById(R.id.searchShop2);
 		db = new DBConnector();
+		
+		Intent intent = getIntent();
+		
+		int selectedProductId = intent.getIntExtra("selectedProductId", 0);
+		
+		// TODO for testing intent extra
+		shopName.setText("Selected productId: "+selectedProductId);
 	}
 	
 	@Override
