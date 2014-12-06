@@ -44,5 +44,6 @@
 	<string name="get_from_map">Get From Map</string>
 	<string name="search_shop">Search for a shop</string>
 	<string name="product_prices">Product Prices</string>
+	<string name="product_product">Product:</string>
 	
 </resources>
