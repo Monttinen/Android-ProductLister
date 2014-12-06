@@ -71,7 +71,10 @@ public class ProductSearch extends Activity implements OnClickListener {
 
 		EditText textField = (EditText) findViewById(R.id.product_search_textfield);
 		String keyword = textField.getText().toString();
-
+		if(keyword.length() < 1){
+			Toast.makeText(getApplicationContext(), "Give a proper keyword.", Toast.LENGTH_SHORT).show();
+			return;
+		}
 		SearchProductsTask search = new SearchProductsTask();
 		search.execute(keyword);
 

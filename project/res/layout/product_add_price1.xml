@@ -59,7 +59,7 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/button1"
+        android:id="@+id/price_next_step_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
