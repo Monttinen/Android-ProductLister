@@ -175,6 +175,42 @@ public class DBConnector {
 		return results;
 	}
 	
+	
+		public ArrayList<Shop> searchShops(String keyword) throws Exception {
+		ArrayList<Shop> results = new ArrayList<Shop>();
+		String responseString;
+
+		if(keyword.length() < 1){
+			throw new Exception("Need a keyword.");
+		}
+		
+		responseString = getPage(server+"searchshops?keyword="+keyword);
+
+		// parse json and return arraylist
+		JSONObject json;
+		try {
+			json = new JSONObject(responseString);
+			if (json.getString("success").equals("1")) {
+				JSONArray shops = json.getJSONArray("shops");
+				for (int i = 0; i < shops.length(); i++) {
+					JSONObject s = shops.getJSONObject(i);
+
+					// Some of these can be < 0.0 !
+					int id = s.getInt("shopId");
+					String name = s.getString("shopName");
+					String address = s.getString("shopAddress");
+					String location = s.getString("shopLocation");
+					
+					results.add(new Shop(id, name, address, location));
+				}
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return results;
+	}
+	
 	public JSONArray addProduct(Product p) {
 		JSONArray result = new JSONArray();
 

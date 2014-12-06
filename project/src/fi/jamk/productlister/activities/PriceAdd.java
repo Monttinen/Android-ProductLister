@@ -3,7 +3,6 @@ package fi.jamk.productlister.activities;
 import fi.jamk.productlister.db.DBConnector;
 import android.app.Activity;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -115,6 +114,9 @@ public class PriceAdd extends Activity implements View.OnClickListener, AdapterV
 	private void searchProducts() {
 		int categoryId = getSelectedCategory();
 		String keyword = name.getText().toString();
+		
+		// clear selected product after each search
+		selectedProduct = null;
 		
 		SearchProductsTask task = new SearchProductsTask();
 		Object[] params = new Object[2];

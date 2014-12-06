@@ -29,4 +29,7 @@ public class Shop {
 		return ShopLocation;
 	}
 	
+	public String toString(){
+		return ShopName;
+	}
 }
