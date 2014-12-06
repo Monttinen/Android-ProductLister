@@ -22,7 +22,7 @@
 		android:label="@string/app_name"
 		android:theme="@style/AppTheme" >
 		<activity
-			android:name=".MainActivity"
+			android:name=".activities.MainActivity"
 			android:label="@string/app_name" 
 			android:screenOrientation="portrait">>
 			<intent-filter>
@@ -33,33 +33,33 @@
 		</activity>
 		<activity 
 			android:windowSoftInputMode="stateUnchanged"
-			android:name=".ProductSearch"
+			android:name=".activities.ProductSearch"
 			android:label="@string/product_search"
 			android:screenOrientation="portrait">
 		</activity>
 		<activity 
 			android:windowSoftInputMode="stateUnchanged"
-			android:name=".ProductAdd"
+			android:name=".activities.ProductAdd"
 			android:label="@string/product_add"
 			android:screenOrientation="portrait">
 		</activity>
 		<activity 
-			android:name=".PriceAdd"
+			android:name=".activities.PriceAdd"
 			android:label="@string/product_add_price1"
 			android:screenOrientation="portrait">
 		</activity>
 		<activity 
-			android:name=".PriceAdd2"
+			android:name=".activities.PriceAdd2"
 			android:label="@string/product_add_price2"
 			android:screenOrientation="portrait">
 		</activity>
 		<activity 
-			android:name=".PriceAdd3"
+			android:name=".activities.PriceAdd3"
 			android:label="@string/product_add_price3"
 			android:screenOrientation="portrait">
 		</activity>
 		<activity
-			android:name=".ShopAdd"
+			android:name=".activities.ShopAdd"
 			android:label="@string/add_shop"
 			android:screenOrientation="portrait">
 		</activity>
