@@ -1,6 +1,7 @@
 package fi.jamk.productlister.db;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Base64;
 import fi.jamk.productlister.model.Category;
 import fi.jamk.productlister.model.Product;
@@ -24,13 +25,14 @@ import org.json.*;
 public class DBConnector {
 
 	private String server;
-
+	private String imageServer;
 	/**
 	 * *
 	 * Constructor that sets server address.
 	 */
 	public DBConnector() {
 		server = "http://128.199.60.131:8080/data/";
+		imageServer = "http://128.199.60.131/img/";
 	}
 
 	/**
@@ -343,7 +345,7 @@ public class DBConnector {
 			image.compress(Bitmap.CompressFormat.JPEG, 85, stream);
 			byte[] imageBytes = stream.toByteArray();
 			String imageString = Base64.encodeToString(imageBytes, Base64.DEFAULT);
-			
+
 			JSONObject json = new JSONObject();
 			json.put("productId", productId);
 			json.put("productImage", imageString);
@@ -354,4 +356,20 @@ public class DBConnector {
 		}
 		return result;
 	}
+
+	public Bitmap getProductImage(int productId) {
+		try {
+			URL url = new URL(imageServer + productId+".jpg");
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setDoInput(true);
+			connection.connect();
+			InputStream input = connection.getInputStream();
+			Bitmap myBitmap = BitmapFactory.decodeStream(input);
+			return myBitmap;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 }

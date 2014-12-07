@@ -2,7 +2,20 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent" >
-
+	<TextView 
+		android:id="@+id/price_step_2_selected_product_label"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentTop="true"
+		android:text="@string/product_add_price_product" />
+	<TextView 
+		android:id="@+id/price_step_2_selected_product_text"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignBaseline="@+id/price_step_2_selected_product_label"
+		android:layout_toRightOf="@+id/price_step_2_selected_product_label"
+		android:layout_marginLeft="10dp"
+		android:text="productName"	/>
 	<Button
 		android:id="@+id/price_next_step_2"
 		android:layout_width="wrap_content"
@@ -34,7 +47,7 @@
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_alignParentLeft="true"
-	    android:layout_alignParentTop="true"
+		android:layout_below="@+id/price_step_2_selected_product_label"
 	    android:ems="10"
 	    android:hint="@string/search_shop" >
 

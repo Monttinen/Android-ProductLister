@@ -10,26 +10,26 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:text="@string/product_add_add_button" />
+        android:text="@string/add_price" />
 
 
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/selected_product_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:text="@string/product_product" />
 	<ImageView
-		android:id="@+id/imageView"
+		android:id="@+id/productImageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
 		android:contentDescription="@string/product_image"
-        android:layout_below="@+id/textView1" />
+        android:layout_below="@+id/selected_product_text" />
     <ListView
         android:id="@+id/listView1"
-        android:layout_below="@+id/imageView"
+        android:layout_below="@+id/productImageView"
         android:layout_above="@+id/product_prices_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,9 +41,8 @@
         android:id="@+id/productPricesSearched"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/listView1"
+        android:layout_above="@+id/productImageView"
         android:layout_marginLeft="14dp"
-        android:layout_toRightOf="@+id/textView1"
-        android:text="SEARCHED PRODUCT" />
+        android:layout_toRightOf="@+id/selected_product_text" />
 
 </RelativeLayout>

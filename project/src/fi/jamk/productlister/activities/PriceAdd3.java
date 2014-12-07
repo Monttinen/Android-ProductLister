@@ -104,7 +104,7 @@ public class PriceAdd3 extends Activity implements View.OnClickListener {
 			if (result.getJSONObject(0).getString("success").equals("0")) {
 				Toast.makeText(getApplicationContext(), result.getJSONObject(0).getString("message"), Toast.LENGTH_LONG).show();
 			} else {
-				Toast.makeText(getApplicationContext(), "Added price for: " + selectedProductId, Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "Added price for: " + selectedProductName, Toast.LENGTH_SHORT).show();
 				// TODO move to product prices or what? main activity for now.
 				Intent intent = new Intent(this, MainActivity.class);
 				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // clear back button
