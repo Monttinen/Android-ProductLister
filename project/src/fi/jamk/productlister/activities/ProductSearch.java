@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,20 +20,25 @@ import android.widget.ListView;
 import android.widget.Toast;
 import fi.jamk.productlister.R;
 
-public class ProductSearch extends Activity implements OnClickListener {
+public class ProductSearch extends Activity implements OnClickListener, AdapterView.OnItemClickListener {
 
 	private DBConnector db;
 	private ArrayList<Product> productlist;
+	private Product selectedProduct;
 	ListView listViewProducts;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.product_search);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 		db = new DBConnector();
 		productlist = new ArrayList<Product>();
+		selectedProduct = null;
+		
 		listViewProducts = (ListView) findViewById(R.id.product_search_listview);
-
+		listViewProducts.setOnItemClickListener(this);
+		
 		Button searchButton = (Button) findViewById(R.id.product_search_search);
 		searchButton.setOnClickListener(this);
 
@@ -41,8 +47,6 @@ public class ProductSearch extends Activity implements OnClickListener {
 
 		Button addShopButton = (Button) findViewById(R.id.product_search_add_shop);
 		addShopButton.setOnClickListener(this);
-		
-		
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -74,7 +78,7 @@ public class ProductSearch extends Activity implements OnClickListener {
 
 		EditText textField = (EditText) findViewById(R.id.product_search_textfield);
 		String keyword = textField.getText().toString();
-		if(keyword.length() < 1){
+		if (keyword.length() < 1) {
 			Toast.makeText(getApplicationContext(), "Give a proper keyword.", Toast.LENGTH_SHORT).show();
 			return;
 		}
@@ -96,6 +100,19 @@ public class ProductSearch extends Activity implements OnClickListener {
 				android.R.layout.simple_list_item_1, productlist);
 		listViewProducts.setAdapter(newadapter);
 
+	}
+
+	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+		if (parent.getId() == R.id.product_search_listview) {
+			selectedProduct = (Product) parent.getItemAtPosition(position);
+			listViewProducts.setItemChecked(position, true);
+			
+			Intent intent = new Intent(this, ProductPrices.class);
+			intent.putExtra("selectedProductId", selectedProduct.getProductId());
+			intent.putExtra("selectedProductName", selectedProduct.getProductName());
+
+			startActivity(intent);
+		}
 	}
 
 	private class SearchProductsTask extends AsyncTask<String, Void, ArrayList<Product>> {

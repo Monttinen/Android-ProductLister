@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.TextView;
 import fi.jamk.productlister.R;
 import fi.jamk.productlister.model.Shop;
 import java.util.ArrayList;
@@ -43,9 +44,11 @@ public class PriceAdd2 extends Activity implements View.OnClickListener, Adapter
 
 		Button nextStep2 = (Button) findViewById(R.id.price_next_step_2);
 		Button search = (Button) findViewById(R.id.price_step_2_search);
+		TextView selectedProductText = (TextView) findViewById(R.id.price_step_2_selected_product_text);
+		
 		shopName = (EditText) findViewById(R.id.searchShop2);
 		listViewShops = (ListView) findViewById(R.id.shopList);
-
+		
 		nextStep2.setOnClickListener(this);
 		search.setOnClickListener(this);
 		listViewShops.setOnItemClickListener(this);
@@ -57,6 +60,8 @@ public class PriceAdd2 extends Activity implements View.OnClickListener, Adapter
 		Intent intent = getIntent();
 		selectedProductId = intent.getIntExtra("selectedProductId", 0);
 		selectedProductName = intent.getStringExtra("selectedProductName");
+		
+		selectedProductText.setText(selectedProductName);
 	}
 
 	@Override
