@@ -44,20 +44,23 @@
 		android:layout_toLeftOf="@+id/price_add_name_text"
 		android:text="@string/price_add_search" />
 	
-	<ListView
-		android:id="@+id/price_add_product_list"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_below="@+id/price_add_name_text"
-		android:layout_marginTop="20dp" >
-	</ListView>
-
-	<Button
+		<Button
 		android:id="@+id/price_next_step_1"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_alignParentBottom="true"
 		android:layout_centerHorizontal="true"
 		android:text="@string/next_step" />
+	
+	<ListView
+		android:id="@+id/price_add_product_list"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_below="@+id/price_add_name_text"
+		android:layout_above="@+id/price_next_step_1"
+		android:layout_marginTop="20dp" >
+	</ListView>
+
+
 
 </RelativeLayout>
