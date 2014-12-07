@@ -5,7 +5,6 @@ import fi.jamk.productlister.model.Product;
 import fi.jamk.productlister.model.Category;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -50,6 +49,7 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 
 	private int addedProductId = -1;
 	private String mCurrentPhotoPath = "";
+	private Bitmap productImage = null;
 
 	static final int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -153,6 +153,7 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 			Toast.makeText(getApplicationContext(), "Saved image: " + mCurrentPhotoPath, Toast.LENGTH_LONG).show();
 			// making a JPEG from the scaled down bitmap
 			File file = new File(mCurrentPhotoPath);
+			productImage = imageBitmap;
 
 			FileOutputStream fOut = null;
 
@@ -271,6 +272,34 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 						"Added product: " + productName, Toast.LENGTH_SHORT)
 						.show();
 				addedProductId = result.getJSONObject(0).getInt("productid");
+
+				if (productImage != null) {
+					try {
+						// now send the image
+						AddProductImageTask imagetask = new AddProductImageTask();
+						imagetask.execute();
+						JSONArray result2 = imagetask.get();
+
+						if (result.getJSONObject(0).getString("success").equals("0")) {
+							Toast.makeText(
+									getApplicationContext(),
+									"Error adding product image: "
+									+ result.getJSONObject(0).getString("message"),
+									Toast.LENGTH_LONG).show();
+						} else {
+							Toast.makeText(getApplicationContext(),
+									"Added product image: " + productName, Toast.LENGTH_SHORT)
+									.show();
+						}
+
+					} catch (Exception ex) {
+						Toast.makeText(
+								getApplicationContext(),
+								"Error adding product image: "
+								+ ex.getMessage(),
+								Toast.LENGTH_LONG).show();
+					}
+				}
 			}
 		} catch (InterruptedException ex) {
 			Logger.getLogger(ProductAdd.class.getName()).log(Level.SEVERE,
@@ -298,15 +327,25 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 	}
 
 	private class AddProductTask extends AsyncTask<Product, Void, JSONArray> {
+
 		@Override
 		protected JSONArray doInBackground(Product... params) {
 			JSONArray result = db.addProduct(params[0]);
 			return result;
 		}
 	}
-	
+
+	private class AddProductImageTask extends AsyncTask<Void, Void, JSONArray> {
+
+		@Override
+		protected JSONArray doInBackground(Void... params) {
+			return db.addProductImage(productImage, addedProductId);
+		}
+	}
+
 	/**
 	 * Calculates sample size for requested size.
+	 *
 	 * @param options
 	 * @param reqWidth
 	 * @param reqHeight
@@ -334,7 +373,7 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 
 		return inSampleSize;
 	}
-	
+
 	
 	/**
 	 * Scales down the image based on requested size
@@ -345,7 +384,7 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 	 */
 	public static Bitmap decodeSampledBitmapFromFile(String filePath,
 			int reqWidth, int reqHeight) {
-
+		
 		// First decode with inJustDecodeBounds=true to check dimensions
 		final BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inJustDecodeBounds = true;
