@@ -24,5 +24,6 @@ The user interface is rather simple having only a few buttons that are well labe
 Future development
 ==================
 
-Currently we have no known bugs and neither of us have any plans to develop this further.
-The main problems for future development will be user handling, how to prevent the user from uploading wrong prices or useless photos.
+Currently we have no known bugs. In the future some kind of review function on added prices to check the authenticity of the price and picture could be implemented.
+Updating and deleting products/prices/shops could also be added in the future, this can for now be done directly from the database. 
+
