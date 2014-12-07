@@ -32,8 +32,9 @@ public class PriceAdd2 extends Activity implements View.OnClickListener, Adapter
 	private ArrayList<Shop> shops;
 	private Shop selectedShop;
 
-	int selectedProductId;
-
+	private int selectedProductId;
+	private String selectedProductName;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -55,7 +56,7 @@ public class PriceAdd2 extends Activity implements View.OnClickListener, Adapter
 
 		Intent intent = getIntent();
 		selectedProductId = intent.getIntExtra("selectedProductId", 0);
-
+		selectedProductName = intent.getStringExtra("selectedProductName");
 	}
 
 	@Override
@@ -102,7 +103,9 @@ public class PriceAdd2 extends Activity implements View.OnClickListener, Adapter
 		}
 		Intent intent = new Intent(this, PriceAdd3.class);
 		intent.putExtra("selectedProductId", selectedProductId);
+		intent.putExtra("selectedProductName", selectedProductName);
 		intent.putExtra("selectedShopId", selectedShop.getShopId());
+		intent.putExtra("selectedShopName", selectedShop.getShopName());
 
 		startActivity(intent);
 	}

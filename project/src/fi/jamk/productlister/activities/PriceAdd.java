@@ -146,6 +146,7 @@ public class PriceAdd extends Activity implements View.OnClickListener, AdapterV
 		}
 		Intent intent = new Intent(this, PriceAdd2.class);
 		intent.putExtra("selectedProductId", selectedProduct.getProductId());
+		intent.putExtra("selectedProductName", selectedProduct.getProductName());
 		startActivity(intent);
 	}
 	

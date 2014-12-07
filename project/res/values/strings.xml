@@ -45,5 +45,5 @@
 	<string name="search_shop">Search for a shop</string>
 	<string name="product_prices">Product Prices</string>
 	<string name="product_product">Product:</string>
-	
+	<string name="product_image">Product Image</string>
 </resources>
