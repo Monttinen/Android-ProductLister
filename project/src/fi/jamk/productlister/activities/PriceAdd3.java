@@ -25,7 +25,9 @@ public class PriceAdd3 extends Activity implements View.OnClickListener {
 
 	private int selectedProductId;
 	private int selectedShopId;
-
+	private String selectedProductName;
+	private String selectedShopName;
+	
 	private EditText unitPriceTextField;
 	private EditText quantityPriceTextField;
 	private TextView selectedProductTextView;
@@ -51,10 +53,11 @@ public class PriceAdd3 extends Activity implements View.OnClickListener {
 		Intent intent = getIntent();
 		selectedProductId = intent.getIntExtra("selectedProductId", 0);
 		selectedShopId = intent.getIntExtra("selectedShopId", 0);
-
-		// TODO get actual names
-		selectedProductTextView.setText("" + selectedProductId);
-		selectedShopTextView.setText("" + selectedShopId);
+		selectedProductName = intent.getStringExtra("selectedProductName");
+		selectedShopName = intent.getStringExtra("selectedShopName");
+		
+		selectedProductTextView.setText(selectedProductName);
+		selectedShopTextView.setText(selectedShopName);
 	}
 
 	@Override
@@ -104,6 +107,7 @@ public class PriceAdd3 extends Activity implements View.OnClickListener {
 				Toast.makeText(getApplicationContext(), "Added price for: " + selectedProductId, Toast.LENGTH_SHORT).show();
 				// TODO move to product prices or what? main activity for now.
 				Intent intent = new Intent(this, MainActivity.class);
+				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // clear back button
 				startActivity(intent);
 			}
 		} catch (Exception ex) {

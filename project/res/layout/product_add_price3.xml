@@ -3,35 +3,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <!-- TextView for upper left corner containing "Add Prices" -->
-
-
-    <!-- TextView for "Selected Product:" text -->
-
-
-    <!-- TextView that will contain the selected product -->
-
-
-    <!-- TextView for "Selected Shop:" text -->
-
-
-    <!-- TextView that will contain the selected shop -->
-
-
-    <!-- TextView displaying "Unit Price" -->
-
-
-    <!-- TextView displaying "Quantity Price" -->
-
-
-    <!-- EditText for adding the products unit price -->
-
-
-    <!-- EditText for adding the products quantity price -->
-
-
-    <!-- Button to add new price -->
-
     <Button
         android:id="@+id/price_step_3_add"
         android:layout_width="wrap_content"
