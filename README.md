@@ -8,19 +8,21 @@ can be used to search for shops that sells the product in question. The applicat
 Installation
 ============
 
-It is not planned to have the prototype in mass use.
+It is not planned to have the prototype in mass use and thus does not need installation guides.
 
 Requirements
 ============
 
-Target API Level is 16
+Target API Level is 21
+Minimum API level is 16
 
 User guide
 ==========
 
-The user interface is rather simple and still in the works //TODO
+The user interface is rather simple having only a few buttons that are well labelled and the editable text areas have hints to guide how to use them.
 
 Future development
 ==================
 
-Currently we have no known bugs and neither of us have any plans to develop this further.  //TODO
+Currently we have no known bugs and neither of us have any plans to develop this further.
+The main problems for future development will be user handling, how to prevent the user from uploading wrong prices or useless photos.
