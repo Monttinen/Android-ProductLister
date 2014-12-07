@@ -6,12 +6,14 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
+import static android.content.Context.INPUT_METHOD_SERVICE;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -35,10 +37,10 @@ public class ProductSearch extends Activity implements OnClickListener, AdapterV
 		db = new DBConnector();
 		productlist = new ArrayList<Product>();
 		selectedProduct = null;
-		
+
 		listViewProducts = (ListView) findViewById(R.id.product_search_listview);
 		listViewProducts.setOnItemClickListener(this);
-		
+
 		Button searchButton = (Button) findViewById(R.id.product_search_search);
 		searchButton.setOnClickListener(this);
 
@@ -63,6 +65,7 @@ public class ProductSearch extends Activity implements OnClickListener, AdapterV
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.product_search_search:
+				clearFocus();
 				searchClicked();
 				break;
 			case R.id.product_search_add_product:
@@ -85,28 +88,13 @@ public class ProductSearch extends Activity implements OnClickListener, AdapterV
 		SearchProductsTask search = new SearchProductsTask();
 		search.execute(keyword);
 
-		try {
-			productlist = search.get();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		//TODO custom list item with more info?
-		ArrayAdapter<Product> newadapter = new ArrayAdapter<Product>(ProductSearch.this,
-				android.R.layout.simple_list_item_1, productlist);
-		listViewProducts.setAdapter(newadapter);
-
 	}
 
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		if (parent.getId() == R.id.product_search_listview) {
 			selectedProduct = (Product) parent.getItemAtPosition(position);
 			listViewProducts.setItemChecked(position, true);
-			
+
 			Intent intent = new Intent(this, ProductPrices.class);
 			intent.putExtra("selectedProductId", selectedProduct.getProductId());
 			intent.putExtra("selectedProductName", selectedProduct.getProductName());
@@ -130,8 +118,24 @@ public class ProductSearch extends Activity implements OnClickListener, AdapterV
 
 		@Override
 		protected void onPostExecute(ArrayList<Product> list) {
-			// TODO stop displaying other progress dialog
 			Toast.makeText(getApplicationContext(), "Found " + list.size() + " products.", Toast.LENGTH_SHORT).show();
+			// TODO stop displaying other progress dialog
+			productlist = list;
+
+			//TODO custom list item with more info?
+			ArrayAdapter<Product> newadapter = new ArrayAdapter<Product>(ProductSearch.this,
+					android.R.layout.simple_list_item_1, productlist);
+			listViewProducts.setAdapter(newadapter);
+
+		}
+	}
+
+	private void clearFocus() {
+		try {
+			InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+			imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+		} catch (Exception e) {
+			// TODO: handle exception
 		}
 	}
 }
