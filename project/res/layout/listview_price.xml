@@ -10,19 +10,19 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:gravity="center_vertical"
-        android:layout_alignParentTop="true"
+        android:layout_gravity="top"
         android:textStyle="bold" />
        
      <TextView android:id="@+id/txtUnitPrice"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:gravity="center_vertical"
-        android:layout_alignParentBottom="true"/>
+        android:layout_gravity="center"/>
 	 
 	 <TextView android:id="@+id/txtQuantityPrice"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:gravity="center_vertical"
-        android:layout_alignParentBottom="true"/>
+        android:layout_gravity="bottom"/>
        
 </LinearLayout>
