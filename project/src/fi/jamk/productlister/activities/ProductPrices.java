@@ -8,17 +8,21 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import fi.jamk.productlister.db.DBConnector;
-import java.util.concurrent.ExecutionException;
+import fi.jamk.productlister.model.Price;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class ProductPrices extends Activity implements View.OnClickListener {
-	
+
 	private ImageView productImage;
+	private ListView priceList;
 	private DBConnector db;
 
 	private int selectedProductId;
@@ -33,7 +37,8 @@ public class ProductPrices extends Activity implements View.OnClickListener {
 		((Button) findViewById(R.id.product_prices_add)).setOnClickListener(this);
 		TextView selectedProductTextView = (TextView) findViewById(R.id.productPricesSearched);
 		productImage = (ImageView) findViewById(R.id.productImageView);
-		
+		priceList = (ListView) findViewById(R.id.product_prices_list);
+
 		db = new DBConnector();
 
 		Intent intent = getIntent();
@@ -41,21 +46,13 @@ public class ProductPrices extends Activity implements View.OnClickListener {
 		selectedProductName = intent.getStringExtra("selectedProductName");
 
 		selectedProductTextView.setText(selectedProductName);
-		
+
 		GetProductImage getImageTask = new GetProductImage();
 		getImageTask.execute();
-		Bitmap image = null;
-		try {
-			image = getImageTask.get();
-			productImage.setImageBitmap(image);
-		} catch (InterruptedException ex) {
-			Logger.getLogger(ProductPrices.class.getName()).log(Level.SEVERE, null, ex);
-		} catch (ExecutionException ex) {
-			Logger.getLogger(ProductPrices.class.getName()).log(Level.SEVERE, null, ex);
-		}
-		
+		GetProductPrices getPricesTask = new GetProductPrices();
+		getPricesTask.execute();
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -63,7 +60,7 @@ public class ProductPrices extends Activity implements View.OnClickListener {
 		startActivity(intent);
 		return true;
 	}
-	
+
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -77,9 +74,35 @@ public class ProductPrices extends Activity implements View.OnClickListener {
 	}
 
 	private class GetProductImage extends AsyncTask<Void, Void, Bitmap> {
+
 		@Override
 		protected Bitmap doInBackground(Void... params) {
 			return db.getProductImage(selectedProductId);
+		}
+
+		@Override
+		protected void onPostExecute(Bitmap b) {
+			productImage.setImageBitmap(b);
+		}
+	}
+
+	private class GetProductPrices extends AsyncTask<Void, Void, ArrayList<Price>> {
+
+		@Override
+		protected ArrayList<Price> doInBackground(Void... params) {
+			try {
+				return db.getPrices(0, selectedProductId);
+			} catch (Exception ex) {
+				Logger.getLogger(ProductPrices.class.getName()).log(Level.SEVERE, null, ex);
+			}
+			return new ArrayList<Price>();
+		}
+
+		@Override
+		protected void onPostExecute(ArrayList<Price> prices) {
+			ArrayAdapter<Price> newadapter = new ArrayAdapter<Price>(ProductPrices.this,
+					android.R.layout.simple_list_item_1, prices);
+			priceList.setAdapter(newadapter);
 		}
 	}
 }
