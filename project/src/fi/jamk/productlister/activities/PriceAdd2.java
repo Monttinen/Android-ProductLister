@@ -92,6 +92,9 @@ public class PriceAdd2 extends Activity implements View.OnClickListener, Adapter
 
 	private void searchShops() {
 		String keyword = shopName.getText().toString();
+		if(keyword.length()<1){
+			return;
+		}
 		SearchShopsTask task = new SearchShopsTask();
 		task.execute(keyword);
 	}

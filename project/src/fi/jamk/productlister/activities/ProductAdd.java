@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -48,6 +49,7 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 	private Spinner subCategorySpinner;
 	private TextView name;
 	private ProgressDialog progress;
+	private ImageView picture;
 	
 	private int addedProductId = -1;
 	private String mCurrentPhotoPath = "";
@@ -68,7 +70,12 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 		((Button) findViewById(R.id.take_picture)).setOnClickListener(this);
 		((Button) findViewById(R.id.product_add_addbutton))
 				.setOnClickListener(this);
-
+		
+		picture = (ImageView) findViewById(R.id.camera_preview);
+		Point size = new Point();
+		getWindowManager().getDefaultDisplay().getSize(size);
+		picture.setMaxHeight((int)(size.x*0.5));
+		
 		categorySpinner = (Spinner) findViewById(R.id.product_add_category);
 		subCategorySpinner = (Spinner) findViewById(R.id.product_add_subcategory);
 
@@ -150,7 +157,6 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 			// saving data from the camera into a Bitmap
 			Bitmap imageBitmap = decodeSampledBitmapFromFile(mCurrentPhotoPath, 500, 500);
 
-			ImageView picture = (ImageView) findViewById(R.id.camera_preview);
 			picture.setImageBitmap(imageBitmap);
 
 			Toast.makeText(getApplicationContext(), "Saved image: " + mCurrentPhotoPath, Toast.LENGTH_LONG).show();
@@ -278,6 +284,8 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 				Toast.makeText(getApplicationContext(),
 						"Added product: " + productName, Toast.LENGTH_SHORT)
 						.show();
+				// clear the name field after adding
+				name.setText("");
 				addedProductId = result.getJSONObject(0).getInt("productid");
 
 				if (productImage != null) {
