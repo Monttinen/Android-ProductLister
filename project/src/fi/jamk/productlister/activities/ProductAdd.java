@@ -5,9 +5,13 @@ import fi.jamk.productlister.model.Product;
 import fi.jamk.productlister.model.Category;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.view.MenuItem;
 import android.view.View;
@@ -31,7 +35,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 /**
- * 
+ *
  * @author Monttinen & Zamess
  */
 public class ProductAdd extends Activity implements View.OnClickListener,
@@ -43,6 +47,9 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 	private Spinner categorySpinner;
 	private Spinner subCategorySpinner;
 	private TextView name;
+
+	private int addedProductId = -1;
+	private String mCurrentPhotoPath = "";
 
 	static final int REQUEST_IMAGE_CAPTURE = 1;
 
@@ -104,22 +111,48 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 	private void TakePicture() {
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		// Ensure that there's a camera activity to handle the intent
-		if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+		File photoFile = null;
+		try {
+			photoFile = createImageFile();
+		} catch (IOException ex) {
+			// Error occurred while creating the File
+			Toast.makeText(getApplicationContext(), "Creating tmp image failed: " + ex.getMessage(), Toast.LENGTH_LONG).show();
+		}
+
+		if (photoFile != null && takePictureIntent.resolveActivity(getPackageManager()) != null) {
+			takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
 			startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
 		}
+	}
+
+	private File createImageFile() throws IOException {
+		String imageFileName = "productimage";
+		File storageDir = Environment.getExternalStoragePublicDirectory(
+				Environment.DIRECTORY_PICTURES);
+		File image = File.createTempFile(
+				imageFileName, /* prefix */
+				".jpg", /* suffix */
+				storageDir /* directory */
+		);
+
+		mCurrentPhotoPath = image.getAbsolutePath();
+
+		return image;
+
 	}
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
 			// saving data from the camera into a Bitmap
-			Bundle extras = data.getExtras();
-			Bitmap imageBitmap = (Bitmap) extras.get("data");
+			Bitmap imageBitmap = decodeSampledBitmapFromFile(mCurrentPhotoPath, 500, 500);
+
 			ImageView picture = (ImageView) findViewById(R.id.camera_preview);
 			picture.setImageBitmap(imageBitmap);
 
-			// making a JPEG from the bitmap
-			File file = new File(getDir("images", 1), "product");
+			Toast.makeText(getApplicationContext(), "Saved image: " + mCurrentPhotoPath, Toast.LENGTH_LONG).show();
+			// making a JPEG from the scaled down bitmap
+			File file = new File(mCurrentPhotoPath);
 
 			FileOutputStream fOut = null;
 
@@ -141,23 +174,23 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 	public void onItemSelected(AdapterView<?> parent, View v, int position,
 			long id) {
 		switch (parent.getId()) {
-		case R.id.product_add_category:
-			Category c = (Category) ((Spinner) parent).getSelectedItem();
-			subCategories = getSubCategories(c.getCategoryId());
-			ArrayAdapter<Category> newadapter = new ArrayAdapter<Category>(
-					ProductAdd.this,
-					android.R.layout.simple_spinner_dropdown_item,
-					subCategories);
+			case R.id.product_add_category:
+				Category c = (Category) ((Spinner) parent).getSelectedItem();
+				subCategories = getSubCategories(c.getCategoryId());
+				ArrayAdapter<Category> newadapter = new ArrayAdapter<Category>(
+						ProductAdd.this,
+						android.R.layout.simple_spinner_dropdown_item,
+						subCategories);
 
-			subCategorySpinner.setAdapter(newadapter);
-			if (subCategories.size() < 1) {
-				subCategorySpinner.setVisibility(View.INVISIBLE);
-			} else {
-				subCategorySpinner.setVisibility(View.VISIBLE);
-			}
-			break;
-		case R.id.product_add_subcategory:
-			break;
+				subCategorySpinner.setAdapter(newadapter);
+				if (subCategories.size() < 1) {
+					subCategorySpinner.setVisibility(View.INVISIBLE);
+				} else {
+					subCategorySpinner.setVisibility(View.VISIBLE);
+				}
+				break;
+			case R.id.product_add_subcategory:
+				break;
 
 		}
 	}
@@ -231,12 +264,13 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 				Toast.makeText(
 						getApplicationContext(),
 						"Error adding product: "
-								+ result.getJSONObject(0).getString("message"),
+						+ result.getJSONObject(0).getString("message"),
 						Toast.LENGTH_LONG).show();
 			} else {
 				Toast.makeText(getApplicationContext(),
 						"Added product: " + productName, Toast.LENGTH_SHORT)
 						.show();
+				addedProductId = result.getJSONObject(0).getInt("productid");
 			}
 		} catch (InterruptedException ex) {
 			Logger.getLogger(ProductAdd.class.getName()).log(Level.SEVERE,
@@ -253,22 +287,75 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.take_picture:
-			TakePicture();
-			break;
-		case R.id.product_add_addbutton:
-			addProduct();
-			break;
+			case R.id.take_picture:
+				TakePicture();
+				break;
+			case R.id.product_add_addbutton:
+				addProduct();
+				break;
 
 		}
 	}
 
 	private class AddProductTask extends AsyncTask<Product, Void, JSONArray> {
-
 		@Override
 		protected JSONArray doInBackground(Product... params) {
 			JSONArray result = db.addProduct(params[0]);
 			return result;
 		}
+	}
+	
+	/**
+	 * Calculates sample size for requested size.
+	 * @param options
+	 * @param reqWidth
+	 * @param reqHeight
+	 * @return sample size
+	 */
+	public static int calculateInSampleSize(
+			BitmapFactory.Options options, int reqWidth, int reqHeight) {
+		// Raw height and width of image
+		final int height = options.outHeight;
+		final int width = options.outWidth;
+		int inSampleSize = 1;
+
+		if (height > reqHeight || width > reqWidth) {
+
+			final int halfHeight = height / 2;
+			final int halfWidth = width / 2;
+
+			// Calculate the largest inSampleSize value that is a power of 2 and keeps both
+			// height and width larger than the requested height and width.
+			while ((halfHeight / inSampleSize) > reqHeight
+					&& (halfWidth / inSampleSize) > reqWidth) {
+				inSampleSize *= 2;
+			}
+		}
+
+		return inSampleSize;
+	}
+	
+	
+	/**
+	 * Scales down the image based on requested size
+	 * @param filePath
+	 * @param reqWidth
+	 * @param reqHeight
+	 * @return Bitmap
+	 */
+	public static Bitmap decodeSampledBitmapFromFile(String filePath,
+			int reqWidth, int reqHeight) {
+
+		// First decode with inJustDecodeBounds=true to check dimensions
+		final BitmapFactory.Options options = new BitmapFactory.Options();
+		options.inJustDecodeBounds = true;
+		BitmapFactory.decodeFile(filePath, options);
+
+		// Calculate inSampleSize
+		options.inSampleSize = calculateInSampleSize(options, reqWidth, reqHeight);
+
+		// Decode bitmap with inSampleSize set
+		options.inJustDecodeBounds = false;
+		return BitmapFactory.decodeFile(filePath, options);
 	}
 }
