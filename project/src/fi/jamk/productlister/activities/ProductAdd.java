@@ -36,7 +36,7 @@ import org.json.JSONException;
 
 /**
  *
- * @author Monttinen & Zamess
+ * @author Monttinen & James Pearce
  */
 public class ProductAdd extends Activity implements View.OnClickListener,
 		AdapterView.OnItemSelectedListener {

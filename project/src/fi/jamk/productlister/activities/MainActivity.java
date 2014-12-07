@@ -9,6 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import fi.jamk.productlister.R;
 
+/**
+*
+* @author Antti Minkkinen & James Pearce
+*/
+
 public class MainActivity extends Activity implements View.OnClickListener {
 
 	@Override

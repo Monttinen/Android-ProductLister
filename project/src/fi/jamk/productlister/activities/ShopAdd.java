@@ -22,7 +22,7 @@ import fi.jamk.productlister.R;
 
 /**
  *
- * @author Monttinen & Zamess
+ * @author Monttinen & James Pearce
  */
 public class ShopAdd extends Activity implements View.OnClickListener {
 
