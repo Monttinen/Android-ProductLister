@@ -26,6 +26,7 @@ public class DBConnector {
 
 	private String server;
 	private String imageServer;
+
 	/**
 	 * *
 	 * Constructor that sets server address.
@@ -213,6 +214,37 @@ public class DBConnector {
 		}
 		return results;
 	}
+	
+	/**
+	 * Gets a shop based on shopId
+	 * @param shopId
+	 * @return Shop
+	 */
+	public Shop getShop(int shopId) {
+		Shop result = null;
+		String responseString;
+		responseString = getPage(server + "shop?shopId=" + shopId);
+
+		JSONObject json;
+		try {
+			json = new JSONObject(responseString);
+			if (json.getString("success").equals("1")) {
+				JSONObject s = json.getJSONObject("shop");
+
+				// Some of these can be < 0.0 !
+				int id = s.getInt("shopId");
+				String name = s.getString("shopName");
+				String address = s.getString("shopAddress");
+				String location = s.getString("shopLocation");
+
+				result = new Shop(id, name, address, location);
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return result;
+	}
 
 	public JSONArray addProduct(Product p) {
 		JSONArray result = new JSONArray();
@@ -359,7 +391,7 @@ public class DBConnector {
 
 	public Bitmap getProductImage(int productId) {
 		try {
-			URL url = new URL(imageServer + productId+".jpg");
+			URL url = new URL(imageServer + productId + ".jpg");
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setDoInput(true);
 			connection.connect();

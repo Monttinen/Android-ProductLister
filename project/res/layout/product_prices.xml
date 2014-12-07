@@ -15,10 +15,11 @@
 
 
     <TextView
-        android:id="@+id/selected_product_text"
+        android:id="@+id/selected_product_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+		android:textSize="20dp"
         android:text="@string/product_product" />
 	<ImageView
 		android:id="@+id/productImageView"
@@ -26,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
 		android:contentDescription="@string/product_image"
-        android:layout_below="@+id/selected_product_text" />
+        android:layout_below="@+id/selected_product_label" />
     <ListView
         android:id="@+id/product_prices_list"
         android:layout_below="@+id/productImageView"
@@ -38,11 +39,12 @@
     </ListView>
 
     <TextView
-        android:id="@+id/productPricesSearched"
+        android:id="@+id/selected_product_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_above="@+id/productImageView"
         android:layout_marginLeft="14dp"
-        android:layout_toRightOf="@+id/selected_product_text" />
+		android:textSize="20dp"
+        android:layout_toRightOf="@+id/selected_product_label" />
 
 </RelativeLayout>

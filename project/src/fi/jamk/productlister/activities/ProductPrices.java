@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import fi.jamk.productlister.adapter.PriceAdapter;
 import fi.jamk.productlister.db.DBConnector;
 import fi.jamk.productlister.model.Price;
 import java.util.ArrayList;
@@ -35,7 +36,7 @@ public class ProductPrices extends Activity implements View.OnClickListener {
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 
 		((Button) findViewById(R.id.product_prices_add)).setOnClickListener(this);
-		TextView selectedProductTextView = (TextView) findViewById(R.id.productPricesSearched);
+		TextView selectedProductTextView = (TextView) findViewById(R.id.selected_product_text);
 		productImage = (ImageView) findViewById(R.id.productImageView);
 		priceList = (ListView) findViewById(R.id.product_prices_list);
 
@@ -100,8 +101,8 @@ public class ProductPrices extends Activity implements View.OnClickListener {
 
 		@Override
 		protected void onPostExecute(ArrayList<Price> prices) {
-			ArrayAdapter<Price> newadapter = new ArrayAdapter<Price>(ProductPrices.this,
-					android.R.layout.simple_list_item_1, prices);
+			PriceAdapter newadapter = new PriceAdapter(ProductPrices.this,
+					R.layout.listview_price, prices);
 			priceList.setAdapter(newadapter);
 		}
 	}
