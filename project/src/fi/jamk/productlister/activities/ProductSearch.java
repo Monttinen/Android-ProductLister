@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -27,8 +28,9 @@ public class ProductSearch extends Activity implements OnClickListener, AdapterV
 	private DBConnector db;
 	private ArrayList<Product> productlist;
 	private Product selectedProduct;
-	ListView listViewProducts;
-
+	private ListView listViewProducts;
+	private ProgressDialog progress;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -51,7 +53,7 @@ public class ProductSearch extends Activity implements OnClickListener, AdapterV
 		addShopButton.setOnClickListener(this);
 
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-
+		progress = new ProgressDialog(this);
 	}
 
 	@Override
@@ -85,6 +87,9 @@ public class ProductSearch extends Activity implements OnClickListener, AdapterV
 			Toast.makeText(getApplicationContext(), "Give a proper keyword.", Toast.LENGTH_SHORT).show();
 			return;
 		}
+		progress.setIndeterminate(true);
+		progress.setMessage("Searching..");
+		progress.show();
 		SearchProductsTask search = new SearchProductsTask();
 		search.execute(keyword);
 
@@ -106,12 +111,6 @@ public class ProductSearch extends Activity implements OnClickListener, AdapterV
 	private class SearchProductsTask extends AsyncTask<String, Void, ArrayList<Product>> {
 
 		@Override
-		protected void onPreExecute() {
-			// TODO some other progress dialog?
-			Toast.makeText(getApplicationContext(), "Searching...", Toast.LENGTH_SHORT).show();
-		}
-
-		@Override
 		protected ArrayList<Product> doInBackground(String... keyword) {
 			return db.searchProducts(keyword[0], 0);
 		}
@@ -126,7 +125,7 @@ public class ProductSearch extends Activity implements OnClickListener, AdapterV
 			ArrayAdapter<Product> newadapter = new ArrayAdapter<Product>(ProductSearch.this,
 					android.R.layout.simple_list_item_1, productlist);
 			listViewProducts.setAdapter(newadapter);
-
+			progress.hide();
 		}
 	}
 

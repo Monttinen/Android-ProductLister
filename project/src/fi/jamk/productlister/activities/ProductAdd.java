@@ -4,6 +4,7 @@ import fi.jamk.productlister.db.DBConnector;
 import fi.jamk.productlister.model.Product;
 import fi.jamk.productlister.model.Category;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -46,7 +47,8 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 	private Spinner categorySpinner;
 	private Spinner subCategorySpinner;
 	private TextView name;
-
+	private ProgressDialog progress;
+	
 	private int addedProductId = -1;
 	private String mCurrentPhotoPath = "";
 	private Bitmap productImage = null;
@@ -61,7 +63,8 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 		db = new DBConnector();
 		categories = new ArrayList<Category>();
 		subCategories = new ArrayList<Category>();
-
+		progress = new ProgressDialog(this);
+		
 		((Button) findViewById(R.id.take_picture)).setOnClickListener(this);
 		((Button) findViewById(R.id.product_add_addbutton))
 				.setOnClickListener(this);
@@ -257,11 +260,15 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 			}
 
 			int productCategoryId = getSelectedCategory();
-
+			progress.setIndeterminate(true);
+			progress.setMessage("Adding the product..");
+			progress.show();
+			
 			AddProductTask task = new AddProductTask();
 			task.execute(new Product(0, productCategoryId, productName, ""));
 			JSONArray result = task.get();
 			if (result.getJSONObject(0).getString("success").equals("0")) {
+				progress.hide();
 				Toast.makeText(
 						getApplicationContext(),
 						"Error adding product: "
@@ -280,25 +287,16 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 						imagetask.execute();
 						JSONArray result2 = imagetask.get();
 
-						if (result.getJSONObject(0).getString("success").equals("0")) {
-							Toast.makeText(
-									getApplicationContext(),
-									"Error adding product image: "
-									+ result.getJSONObject(0).getString("message"),
-									Toast.LENGTH_LONG).show();
-						} else {
-							Toast.makeText(getApplicationContext(),
-									"Added product image: " + productName, Toast.LENGTH_SHORT)
-									.show();
-						}
-
 					} catch (Exception ex) {
+						progress.hide();
 						Toast.makeText(
 								getApplicationContext(),
 								"Error adding product image: "
 								+ ex.getMessage(),
 								Toast.LENGTH_LONG).show();
 					}
+				} else {
+					progress.hide();
 				}
 			}
 		} catch (InterruptedException ex) {
@@ -341,6 +339,28 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 		protected JSONArray doInBackground(Void... params) {
 			return db.addProductImage(productImage, addedProductId);
 		}
+
+		@Override
+		protected void onPostExecute(JSONArray result) {
+
+			try {
+				if (result.getJSONObject(0).getString("success").equals("0")) {
+					Toast.makeText(
+							getApplicationContext(),
+							"Error adding product image: "
+									+ result.getJSONObject(0).getString("message"),
+							Toast.LENGTH_LONG).show();
+				} else {
+					Toast.makeText(getApplicationContext(),
+							"Added product image.", Toast.LENGTH_SHORT)
+							.show();
+				}
+			} catch (JSONException ex) {
+				Logger.getLogger(ProductAdd.class.getName()).log(Level.SEVERE, null, ex);
+			}
+			
+			progress.hide();
+		}
 	}
 
 	/**
@@ -374,9 +394,9 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 		return inSampleSize;
 	}
 
-	
 	/**
 	 * Scales down the image based on requested size
+	 *
 	 * @param filePath
 	 * @param reqWidth
 	 * @param reqHeight
@@ -384,7 +404,7 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 	 */
 	public static Bitmap decodeSampledBitmapFromFile(String filePath,
 			int reqWidth, int reqHeight) {
-		
+
 		// First decode with inJustDecodeBounds=true to check dimensions
 		final BitmapFactory.Options options = new BitmapFactory.Options();
 		options.inJustDecodeBounds = true;

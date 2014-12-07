@@ -8,7 +8,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
+import android.app.ProgressDialog;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -22,6 +22,7 @@ import java.util.logging.Logger;
 
 public class ProductPrices extends Activity implements View.OnClickListener {
 
+	private ProgressDialog progress;
 	private ImageView productImage;
 	private ListView priceList;
 	private DBConnector db;
@@ -39,7 +40,7 @@ public class ProductPrices extends Activity implements View.OnClickListener {
 		TextView selectedProductTextView = (TextView) findViewById(R.id.selected_product_text);
 		productImage = (ImageView) findViewById(R.id.productImageView);
 		priceList = (ListView) findViewById(R.id.product_prices_list);
-
+		progress = new ProgressDialog(this);
 		db = new DBConnector();
 
 		Intent intent = getIntent();
@@ -48,6 +49,9 @@ public class ProductPrices extends Activity implements View.OnClickListener {
 
 		selectedProductTextView.setText(selectedProductName);
 
+		progress.setIndeterminate(true);
+		progress.setMessage("Getting data..");
+		progress.show();
 		GetProductImage getImageTask = new GetProductImage();
 		getImageTask.execute();
 		GetProductPrices getPricesTask = new GetProductPrices();
@@ -104,6 +108,7 @@ public class ProductPrices extends Activity implements View.OnClickListener {
 			PriceAdapter newadapter = new PriceAdapter(ProductPrices.this,
 					R.layout.listview_price, prices);
 			priceList.setAdapter(newadapter);
+			progress.hide();
 		}
 	}
 }
