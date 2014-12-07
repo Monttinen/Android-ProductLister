@@ -86,6 +86,9 @@ public class ShopAdd extends Activity implements View.OnClickListener {
 
 		AddShopTask task = new AddShopTask();
 		task.execute(new Shop(0, ShopName, ShopAddress, ShopLocation));
+		txtShopAddress.setText("");
+		txtShopLocation.setText("");
+		txtShopName.setText("");
 	}
 
 	@Override

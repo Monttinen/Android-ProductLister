@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.app.ProgressDialog;
+import android.graphics.Point;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -42,7 +43,11 @@ public class ProductPrices extends Activity implements View.OnClickListener {
 		priceList = (ListView) findViewById(R.id.product_prices_list);
 		progress = new ProgressDialog(this);
 		db = new DBConnector();
-
+		
+		Point size = new Point();
+		getWindowManager().getDefaultDisplay().getSize(size);
+		productImage.setMaxHeight((int)(size.x*0.5));
+		
 		Intent intent = getIntent();
 		selectedProductId = intent.getIntExtra("selectedProductId", 0);
 		selectedProductName = intent.getStringExtra("selectedProductName");
