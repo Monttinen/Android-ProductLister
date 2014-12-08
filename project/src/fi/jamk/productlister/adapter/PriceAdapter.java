@@ -17,8 +17,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
- * @author Antti Minkkinen
+ * ArrayAdapter for displaying prices
  */
 public class PriceAdapter extends ArrayAdapter<Price>{
 	private Context context;
@@ -59,8 +58,11 @@ public class PriceAdapter extends ArrayAdapter<Price>{
         }
        
         Price price = prices.get(position);
+		
+		// get the shop for the price
 		GetShop task = new GetShop();
 		task.execute(price.getShopId());
+		
 		String shopName = "";
 		try {
 			shopName = task.get();
@@ -84,6 +86,9 @@ public class PriceAdapter extends ArrayAdapter<Price>{
 		TextView qprice;
 	}
 	
+	/**
+	 * AsyncTask for getting the shop for the price
+	 */
 	private class GetShop extends AsyncTask<Integer,Void,String> {
 		@Override
 		protected String doInBackground(Integer... params) {

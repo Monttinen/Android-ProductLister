@@ -23,13 +23,16 @@ import org.apache.http.impl.client.DefaultHttpClient;
 
 import org.json.*;
 
+/**
+ * A connector class that uses JSON queries to communicate with the backend system.
+ */
 public class DBConnector {
-
+	
+	// URL holders for server addresses
 	private String server;
 	private String imageServer;
 
 	/**
-	 * *
 	 * Constructor that sets server address.
 	 */
 	public DBConnector() {
@@ -142,7 +145,15 @@ public class DBConnector {
 		}
 		return results;
 	}
-
+	
+	/**
+	 * Gets a list of prices based on parameters.
+	 * Both can be defined but at least one of them is needed.
+	 * @param shopId
+	 * @param productId
+	 * @return price list
+	 * @throws Exception 
+	 */
 	public ArrayList<Price> getPrices(int shopId, int productId) throws Exception {
 		ArrayList<Price> results = new ArrayList<Price>();
 		String responseString;
@@ -177,7 +188,13 @@ public class DBConnector {
 		}
 		return results;
 	}
-
+	
+	/**
+	 * Searches for shops based on keyword.
+	 * @param keyword
+	 * @return a list of shops
+	 * @throws Exception 
+	 */
 	public ArrayList<Shop> searchShops(String keyword) throws Exception {
 		ArrayList<Shop> results = new ArrayList<Shop>();
 		String responseString;
@@ -241,7 +258,12 @@ public class DBConnector {
 		}
 		return result;
 	}
-
+	
+	/**
+	 * Attempts to add a product to database
+	 * @param p
+	 * @return JSONArray with added product productId or a message if adding failed
+	 */
 	public JSONArray addProduct(Product p) {
 		JSONArray result = new JSONArray();
 
@@ -260,7 +282,12 @@ public class DBConnector {
 		}
 		return result;
 	}
-
+	
+	/**
+	 * Attempts to add a shop to the database.
+	 * @param s
+	 * @return JSONArray with the added shop shopId or a message if adding failed
+	 */
 	public JSONArray addShop(Shop s) {
 		JSONArray result = new JSONArray();
 
@@ -279,7 +306,12 @@ public class DBConnector {
 		}
 		return result;
 	}
-
+	
+	/**
+	 * Attempts to add a price to the database.
+	 * @param p
+	 * @return JSONArray with the added price priceId or a message if adding failed
+	 */
 	public JSONArray addPrice(Price p) {
 		JSONArray result = new JSONArray();
 
@@ -299,7 +331,12 @@ public class DBConnector {
 		}
 		return result;
 	}
-
+	
+	/**
+	 * A method for getting a page with HTTP GET
+	 * @param url
+	 * @return the page as a String
+	 */
 	private String getPage(String url) {
 		HttpURLConnection con = null;
 		try {
@@ -313,13 +350,19 @@ public class DBConnector {
 			}
 		} catch (MalformedURLException e) {
 			Log.e("DBConnector", "Malformed URL: ", e);
-			e.printStackTrace();
 		} catch (IOException e) {
 			Log.e("DBConnector", "IO Exception: ", e);
 		}
 		return null;
 	}
 
+	/**
+	 * Makes a request to the backend.
+	 * @param path URL to send the request to
+	 * @param json a JSON object for the request
+	 * @return JSONArray that contains the response
+	 * @throws Exception 
+	 */
 	public JSONArray makeRequest(String path, JSONObject json) throws Exception {
 		//instantiates httpclient to make request
 		DefaultHttpClient httpclient = new DefaultHttpClient();
@@ -345,7 +388,12 @@ public class DBConnector {
 		result.put(new JSONObject(responseBody));
 		return result;
 	}
-
+	
+	/**
+	 * Gets a string from an input stream
+	 * @param in input stream
+	 * @return string
+	 */
 	private String inputStreamToString(InputStream in) {
 		BufferedReader bufferedReader = new BufferedReader(
 				new InputStreamReader(in));
@@ -363,7 +411,14 @@ public class DBConnector {
 
 		return stringBuilder.toString();
 	}
-
+	
+	/**
+	 * Attempts to add a image for a product.
+	 * @param image bitmap of the image being added
+	 * @param productId the productId of the product
+	 * @return JSONArray containing the productId of the product or a message 
+	 * if adding image failed
+	 */
 	public JSONArray addProductImage(Bitmap image, int productId) {
 		JSONArray result = new JSONArray();
 		try {
@@ -382,7 +437,12 @@ public class DBConnector {
 		}
 		return result;
 	}
-
+	
+	/**
+	 * Gets the product image as a bitmap from the server
+	 * @param productId the product's productId
+	 * @return bitmap 
+	 */
 	public Bitmap getProductImage(int productId) {
 		try {
 			URL url = new URL(imageServer + productId + ".jpg");

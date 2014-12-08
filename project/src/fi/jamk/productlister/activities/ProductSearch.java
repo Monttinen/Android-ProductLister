@@ -23,6 +23,9 @@ import android.widget.ListView;
 import android.widget.Toast;
 import fi.jamk.productlister.R;
 
+/**
+ * The product search activity is used for searching products from the database.
+ */
 public class ProductSearch extends Activity implements OnClickListener, AdapterView.OnItemClickListener {
 
 	private DBConnector db;
@@ -55,7 +58,13 @@ public class ProductSearch extends Activity implements OnClickListener, AdapterV
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		progress = new ProgressDialog(this);
 	}
-
+	
+	/**
+	 * Used for navigating back from the action bar.
+	 * Navigates back to main activity.
+	 * @param item
+	 * @return 
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -63,7 +72,11 @@ public class ProductSearch extends Activity implements OnClickListener, AdapterV
 		startActivity(intent);
 		return true;
 	}
-
+	
+	/**
+	 * The OnClickListeners for buttons.
+	 * @param v 
+	 */
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.product_search_search:
@@ -78,9 +91,11 @@ public class ProductSearch extends Activity implements OnClickListener, AdapterV
 				break;
 		}
 	}
-
+	
+	/**
+	 * Executes the search for products if the keyword has been specified.
+	 */
 	private void searchClicked() {
-
 		EditText textField = (EditText) findViewById(R.id.product_search_textfield);
 		String keyword = textField.getText().toString();
 		if (keyword.length() < 1) {
@@ -94,7 +109,15 @@ public class ProductSearch extends Activity implements OnClickListener, AdapterV
 		search.execute(keyword);
 
 	}
-
+	
+	/**
+	 * The OnItemClick listener for the ListView.
+	 * Navigates to product price activity when a product is clicked from the list.
+	 * @param parent
+	 * @param view
+	 * @param position
+	 * @param id 
+	 */
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		if (parent.getId() == R.id.product_search_listview) {
 			selectedProduct = (Product) parent.getItemAtPosition(position);
@@ -107,7 +130,10 @@ public class ProductSearch extends Activity implements OnClickListener, AdapterV
 			startActivity(intent);
 		}
 	}
-
+	
+	/**
+	 * AsyncTask for searching products to the ListView.
+	 */
 	private class SearchProductsTask extends AsyncTask<String, Void, ArrayList<Product>> {
 
 		@Override
@@ -127,7 +153,11 @@ public class ProductSearch extends Activity implements OnClickListener, AdapterV
 			progress.hide();
 		}
 	}
-
+	
+	/**
+	 * A method for clearing the focus. For example used for removing the
+	 * virtual keyboard when a button has been pressed.
+	 */
 	private void clearFocus() {
 		try {
 			InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);

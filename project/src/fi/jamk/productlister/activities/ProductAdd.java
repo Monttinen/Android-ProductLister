@@ -42,9 +42,9 @@ import org.json.JSONException;
 public class ProductAdd extends Activity implements View.OnClickListener,
 		AdapterView.OnItemSelectedListener {
 
-	private DBConnector db;
 	private ArrayList<Category> categories;
 	private ArrayList<Category> subCategories;
+	
 	private Spinner categorySpinner;
 	private Spinner subCategorySpinner;
 	private TextView name;
@@ -54,7 +54,9 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 	private int addedProductId = -1;
 	private String mCurrentPhotoPath = "";
 	private Bitmap productImage = null;
-
+	
+	private DBConnector db;
+	
 	static final int REQUEST_IMAGE_CAPTURE = 1;
 
 	@Override
@@ -62,6 +64,7 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.product_add);
 		getActionBar().setDisplayHomeAsUpEnabled(true);
+		
 		db = new DBConnector();
 		categories = new ArrayList<Category>();
 		subCategories = new ArrayList<Category>();
@@ -82,7 +85,8 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 		name = (TextView) findViewById(R.id.product_add_name_text);
 
 		categorySpinner.setOnItemSelectedListener(this);
-
+		
+		// Get the categories for spinners
 		GetCategoriesTask gategoryTask = new GetCategoriesTask();
 		gategoryTask.execute();
 
@@ -101,7 +105,8 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 				categories);
 
 		categorySpinner.setAdapter(newadapter);
-
+		
+		// Hides the sub category spinner if a category has no sub category.
 		if (subCategories.size() < 1) {
 			subCategorySpinner.setVisibility(View.INVISIBLE);
 		} else {
@@ -109,6 +114,12 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 		}
 	}
 
+	/**
+	 * Used for navigating back from the action bar.
+	 * Navigates back to main activity.
+	 * @param item
+	 * @return 
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -117,7 +128,10 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 		startActivity(intent);
 		return true;
 	}
-
+	
+	/**
+	 * A method for starting the product image capturing.
+	 */
 	private void TakePicture() {
 		Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 		// Ensure that there's a camera activity to handle the intent
@@ -134,7 +148,12 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 			startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
 		}
 	}
-
+	
+	/**
+	 * Creates an empty file for storing the captured image.
+	 * @return file for image
+	 * @throws IOException 
+	 */
 	private File createImageFile() throws IOException {
 		String imageFileName = "productimage";
 		File storageDir = Environment.getExternalStoragePublicDirectory(
@@ -150,13 +169,20 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 		return image;
 
 	}
-
+	
+	/**
+	 * Processes the image that was taken for a product.
+	 * @param requestCode
+	 * @param resultCode
+	 * @param data 
+	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
 			// saving data from the camera into a Bitmap
 			Bitmap imageBitmap = decodeSampledBitmapFromFile(mCurrentPhotoPath, 500, 500);
-
+			
+			// Set the image to the ImageView
 			picture.setImageBitmap(imageBitmap);
 
 			Toast.makeText(getApplicationContext(), "Saved image: " + mCurrentPhotoPath, Toast.LENGTH_LONG).show();
@@ -180,7 +206,14 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 			}
 		}
 	}
-
+	
+	/**
+	 * A listener for category spinners
+	 * @param parent
+	 * @param v
+	 * @param position
+	 * @param id 
+	 */
 	public void onItemSelected(AdapterView<?> parent, View v, int position,
 			long id) {
 		switch (parent.getId()) {
@@ -204,11 +237,20 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 
 		}
 	}
-
+	
+	/**
+	 * A listener for spinners. Not used really but needs to be implemented.
+	 * @param parent 
+	 */
 	public void onNothingSelected(AdapterView<?> parent) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
-
+	
+	/**
+	 * A method for getting categories.
+	 * @param categoryId
+	 * @return ArrayList of categories
+	 */
 	private ArrayList<Category> getSubCategories(int categoryId) {
 		ArrayList<Category> result = new ArrayList<Category>();
 		GetCategoriesTask gategoryTask = new GetCategoriesTask();
@@ -224,7 +266,10 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 		}
 		return result;
 	}
-
+	
+	/**
+	 * AsyncTask for getting categories from database.
+	 */
 	private class GetCategoriesTask extends
 			AsyncTask<Integer, Void, ArrayList<Category>> {
 
@@ -238,7 +283,11 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 		}
 
 	}
-
+	
+	/**
+	 * A method for getting the currently selected category.
+	 * @return 
+	 */
 	private int getSelectedCategory() {
 		int selectedCategory = 0;
 		Category c;
@@ -251,7 +300,10 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 		selectedCategory = c.getCategoryId();
 		return selectedCategory;
 	}
-
+	
+	/**
+	 * Starts the product adding.
+	 */
 	private void addProduct() {
 		try {
 			String input = name.getText().toString();
@@ -269,7 +321,8 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 			progress.setIndeterminate(true);
 			progress.setMessage("Adding the product..");
 			progress.show();
-			
+		
+			// Start the task for adding the product
 			AddProductTask task = new AddProductTask();
 			task.execute(new Product(0, productCategoryId, productName, ""));
 			JSONArray result = task.get();
@@ -287,7 +340,8 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 				// clear the name field after adding
 				name.setText("");
 				addedProductId = result.getJSONObject(0).getInt("productid");
-
+				
+				// Now add the image if defined.
 				if (productImage != null) {
 					try {
 						// now send the image
@@ -318,7 +372,11 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 					null, ex);
 		}
 	}
-
+	
+	/**
+	 * OnClickListener for buttons.
+	 * @param v 
+	 */
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -331,7 +389,10 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 
 		}
 	}
-
+	
+	/**
+	 * AsyncTask for adding products to the database.
+	 */
 	private class AddProductTask extends AsyncTask<Product, Void, JSONArray> {
 
 		@Override
@@ -340,7 +401,10 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 			return result;
 		}
 	}
-
+	
+	/**
+	 * AsyncTask for adding product images to the database.
+	 */
 	private class AddProductImageTask extends AsyncTask<Void, Void, JSONArray> {
 
 		@Override

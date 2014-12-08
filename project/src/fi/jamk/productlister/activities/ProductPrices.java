@@ -62,7 +62,13 @@ public class ProductPrices extends Activity implements View.OnClickListener {
 		GetProductPrices getPricesTask = new GetProductPrices();
 		getPricesTask.execute();
 	}
-
+	
+	/**
+	 * Used for navigating back from the action bar.
+	 * Navigates back to main activity.
+	 * @param item
+	 * @return 
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -70,7 +76,11 @@ public class ProductPrices extends Activity implements View.OnClickListener {
 		startActivity(intent);
 		return true;
 	}
-
+	
+	/**
+	 * OnClickListener for the add button.
+	 * @param v 
+	 */
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -82,7 +92,10 @@ public class ProductPrices extends Activity implements View.OnClickListener {
 				break;
 		}
 	}
-
+	
+	/**
+	 * AsyncTask for getting the product image.
+	 */
 	private class GetProductImage extends AsyncTask<Void, Void, Bitmap> {
 
 		@Override
@@ -95,7 +108,10 @@ public class ProductPrices extends Activity implements View.OnClickListener {
 			productImage.setImageBitmap(b);
 		}
 	}
-
+	
+	/**
+	 * AsyncTask for getting the product prices.
+	 */
 	private class GetProductPrices extends AsyncTask<Void, Void, ArrayList<Price>> {
 
 		@Override

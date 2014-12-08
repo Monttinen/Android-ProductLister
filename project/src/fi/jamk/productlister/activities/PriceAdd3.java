@@ -64,7 +64,13 @@ public class PriceAdd3 extends Activity implements View.OnClickListener {
 		selectedProductTextView.setText(selectedProductName);
 		selectedShopTextView.setText(selectedShopName);
 	}
-
+	
+	/**
+	 * Used for navigating back from the action bar.
+	 * Navigates back to main activity.
+	 * @param item
+	 * @return 
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -72,7 +78,11 @@ public class PriceAdd3 extends Activity implements View.OnClickListener {
 		startActivity(intent);
 		return true;
 	}
-
+	
+	/**
+	 * Listener for buttons.
+	 * @param v 
+	 */
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -81,7 +91,10 @@ public class PriceAdd3 extends Activity implements View.OnClickListener {
 				break;
 		}
 	}
-
+	
+	/**
+	 * Starts the price adding.
+	 */
 	private void addPrice() {
 		progress.setIndeterminate(true);
 		progress.setMessage("Adding product");
@@ -105,7 +118,7 @@ public class PriceAdd3 extends Activity implements View.OnClickListener {
 		}
 
 		try {
-			AddProductTask task = new AddProductTask();
+			AddPriceTask task = new AddPriceTask();
 			task.execute(new Price(0, selectedShopId, selectedProductId, unitPrice, quantityPrice));
 			Intent intent = new Intent(this, ProductPrices.class);
 			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // clear back button
@@ -116,8 +129,11 @@ public class PriceAdd3 extends Activity implements View.OnClickListener {
 			Logger.getLogger(ProductAdd.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
-
-	private class AddProductTask extends AsyncTask<Price, Void, JSONArray> {
+	
+	/**
+	 * AsyncTask for adding a price to the database.
+	 */
+	private class AddPriceTask extends AsyncTask<Price, Void, JSONArray> {
 
 		@Override
 		protected JSONArray doInBackground(Price... params) {

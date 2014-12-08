@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import fi.jamk.productlister.R;
 import fi.jamk.productlister.model.Shop;
 import java.util.ArrayList;
@@ -72,7 +71,13 @@ public class PriceAdd2 extends Activity implements View.OnClickListener, Adapter
 
 		selectedProductText.setText(selectedProductName);
 	}
-
+	
+	/**
+	 * Used for navigating back from the action bar.
+	 * Navigates back to main activity.
+	 * @param item
+	 * @return 
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -80,7 +85,11 @@ public class PriceAdd2 extends Activity implements View.OnClickListener, Adapter
 		startActivity(intent);
 		return true;
 	}
-
+	
+	/**
+	 * Listener for buttons.
+	 * @param v 
+	 */
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -93,7 +102,10 @@ public class PriceAdd2 extends Activity implements View.OnClickListener, Adapter
 				break;
 		}
 	}
-
+	
+	/**
+	 * Starts the shop search.
+	 */
 	private void searchShops() {
 		String keyword = shopName.getText().toString();
 		if(keyword.length()<1){
@@ -106,7 +118,10 @@ public class PriceAdd2 extends Activity implements View.OnClickListener, Adapter
 		SearchShopsTask task = new SearchShopsTask();
 		task.execute(keyword);
 	}
-
+	
+	/**
+	 * A method for navigating to the next step of price adding.
+	 */
 	private void nextStep2() {
 		if (selectedShop == null || selectedProductId < 1) {
 			return;
@@ -119,7 +134,10 @@ public class PriceAdd2 extends Activity implements View.OnClickListener, Adapter
 
 		startActivity(intent);
 	}
-
+	
+	/**
+	 * AsyncTask for searching shops.
+	 */
 	private class SearchShopsTask extends AsyncTask<String, Void, ArrayList<Shop>> {
 
 		@Override
@@ -142,7 +160,14 @@ public class PriceAdd2 extends Activity implements View.OnClickListener, Adapter
 			progress.hide();
 		}
 	}
-
+	
+	/**
+	 * Listener for the shop list view.
+	 * @param parent
+	 * @param view
+	 * @param position
+	 * @param id 
+	 */
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		if (parent.getId() == R.id.shopList) {
 			selectedShop = (Shop) parent.getItemAtPosition(position);
@@ -150,7 +175,11 @@ public class PriceAdd2 extends Activity implements View.OnClickListener, Adapter
 			nextStep2();
 		}
 	}
-
+	
+	/**
+	 * A method for clearing the focus. For example used for removing the
+	 * virtual keyboard when a button has been pressed.
+	 */
 	private void clearFocus() {
 		try {
 			InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);

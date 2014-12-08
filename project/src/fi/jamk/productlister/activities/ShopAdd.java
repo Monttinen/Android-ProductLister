@@ -53,7 +53,13 @@ public class ShopAdd extends Activity implements View.OnClickListener {
 		txtShopLocation = (EditText) findViewById(R.id.editTextLocation);
 
 	}
-
+	
+	/**
+	 * Used for navigating back from the action bar.
+	 * Navigates back to main activity.
+	 * @param item
+	 * @return 
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -61,7 +67,11 @@ public class ShopAdd extends Activity implements View.OnClickListener {
 		startActivity(intent);
 		return true;
 	}
-
+	
+	/**
+	 * A method called when pressing the add button.
+	 * Validates input fields and starts the AddShopTask
+	 */
 	private void addShop() {
 		//setting Strings from EditTexts
 		ShopName = txtShopName.getText().toString(); 
@@ -87,7 +97,11 @@ public class ShopAdd extends Activity implements View.OnClickListener {
 		txtShopLocation.setText("");
 		txtShopName.setText("");
 	}
-
+	
+	/**
+	 * OnClickListener for the add button.
+	 * @param v 
+	 */
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -99,7 +113,10 @@ public class ShopAdd extends Activity implements View.OnClickListener {
 		}
 
 	}
-
+	
+	/**
+	 * AsyncTask for adding a shop.
+	 */
 	public class AddShopTask extends AsyncTask<Shop, Void, JSONArray> {
 
 		@Override
@@ -122,6 +139,10 @@ public class ShopAdd extends Activity implements View.OnClickListener {
 		}
 	}
 	
+	/**
+	 * A method for clearing the focus. For example used for removing the
+	 * virtual keyboard when a button has been pressed.
+	 */
 	private void clearFocus() {
 		try {
 			InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);

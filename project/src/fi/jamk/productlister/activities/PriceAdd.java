@@ -16,8 +16,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Spinner;
-import android.widget.TextView;
-import android.widget.Toast;
 import fi.jamk.productlister.R;
 import fi.jamk.productlister.model.Category;
 import fi.jamk.productlister.model.Product;
@@ -78,7 +76,8 @@ public class PriceAdd extends Activity implements View.OnClickListener, AdapterV
 		db = new DBConnector();
 
 		selectedProduct = null;
-
+		
+		// Get the categories for spinners.
 		GetCategoriesTask gategoryTask = new GetCategoriesTask();
 		gategoryTask.execute();
 
@@ -101,7 +100,13 @@ public class PriceAdd extends Activity implements View.OnClickListener, AdapterV
 			subCategorySpinner.setVisibility(View.VISIBLE);
 		}
 	}
-
+	
+	/**
+	 * Used for navigating back from the action bar.
+	 * Navigates back to main activity.
+	 * @param item
+	 * @return 
+	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Intent intent = new Intent(getApplicationContext(), MainActivity.class);
@@ -109,7 +114,11 @@ public class PriceAdd extends Activity implements View.OnClickListener, AdapterV
 		startActivity(intent);
 		return true;
 	}
-
+	
+	/**
+	 * OnClickListener for buttons.
+	 * @param v 
+	 */
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -122,7 +131,10 @@ public class PriceAdd extends Activity implements View.OnClickListener, AdapterV
 				break;
 		}
 	}
-
+	
+	/**
+	 * Starts the product searching.
+	 */
 	private void searchProducts() {
 		int categoryId = getSelectedCategory();
 		String keyword = name.getText().toString();
@@ -142,7 +154,10 @@ public class PriceAdd extends Activity implements View.OnClickListener, AdapterV
 		task.execute(params);
 
 	}
-
+	
+	/**
+	 * Used for navigating to the next step in price adding.
+	 */
 	private void nextStep1() {
 		// Check that a product has been selected.
 		if (selectedProduct == null) {
@@ -153,7 +168,14 @@ public class PriceAdd extends Activity implements View.OnClickListener, AdapterV
 		intent.putExtra("selectedProductName", selectedProduct.getProductName());
 		startActivity(intent);
 	}
-
+	
+	/**
+	 * A listener for category spinners.
+	 * @param parent
+	 * @param v
+	 * @param position
+	 * @param id 
+	 */
 	public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
 		switch (parent.getId()) {
 			case R.id.price_add_category:
@@ -174,11 +196,20 @@ public class PriceAdd extends Activity implements View.OnClickListener, AdapterV
 
 		}
 	}
-
+	
+	/**
+	 * A required listener for spinners.
+	 * @param parent 
+	 */
 	public void onNothingSelected(AdapterView<?> parent) {
 		throw new UnsupportedOperationException("Not supported yet.");
 	}
-
+	
+	/**
+	 * A method for getting the categories.
+	 * @param categoryId
+	 * @return 
+	 */
 	private ArrayList<Category> getSubCategories(int categoryId) {
 		ArrayList<Category> result = new ArrayList<Category>();
 		GetCategoriesTask gategoryTask = new GetCategoriesTask();
@@ -192,7 +223,10 @@ public class PriceAdd extends Activity implements View.OnClickListener, AdapterV
 		}
 		return result;
 	}
-
+	
+	/**
+	 * AsyncTask for getting the categories.
+	 */
 	private class GetCategoriesTask extends AsyncTask<Integer, Void, ArrayList<Category>> {
 
 		@Override
@@ -205,7 +239,11 @@ public class PriceAdd extends Activity implements View.OnClickListener, AdapterV
 		}
 
 	}
-
+	
+	/**
+	 * A method for getting the selected category.
+	 * @return 
+	 */
 	private int getSelectedCategory() {
 		int selectedCategory = 0;
 		Category c;
@@ -218,7 +256,10 @@ public class PriceAdd extends Activity implements View.OnClickListener, AdapterV
 		selectedCategory = c.getCategoryId();
 		return selectedCategory;
 	}
-
+	
+	/**
+	 * AsyncTask for searching products.
+	 */
 	private class SearchProductsTask extends AsyncTask<Object, Void, ArrayList<Product>> {
 		@Override
 		protected ArrayList<Product> doInBackground(Object... params) {
@@ -237,7 +278,14 @@ public class PriceAdd extends Activity implements View.OnClickListener, AdapterV
 			listViewProducts.setAdapter(newadapter);
 		}
 	}
-
+	
+	/**
+	 * Listener for the product list view.
+	 * @param parent
+	 * @param view
+	 * @param position
+	 * @param id 
+	 */
 	public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 		if (parent.getId() == R.id.price_add_product_list) {
 			selectedProduct = (Product) parent.getItemAtPosition(position);
@@ -245,7 +293,11 @@ public class PriceAdd extends Activity implements View.OnClickListener, AdapterV
 			nextStep1();
 		}
 	}
-
+	
+	/**
+	 * A method for clearing the focus. For example used for removing the
+	 * virtual keyboard when a button has been pressed.
+	 */
 	private void clearFocus() {
 		try {
 			InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
