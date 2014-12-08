@@ -2,9 +2,11 @@ package fi.jamk.productlister.activities;
 
 import fi.jamk.productlister.db.DBConnector;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -39,6 +41,7 @@ public class PriceAdd extends Activity implements View.OnClickListener, AdapterV
 	private Spinner subCategorySpinner;
 	private EditText name;
 	private ListView listViewProducts;
+	private ProgressDialog progress;
 
 	private Product selectedProduct;
 
@@ -69,6 +72,8 @@ public class PriceAdd extends Activity implements View.OnClickListener, AdapterV
 
 		listViewProducts.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 		listViewProducts.setItemsCanFocus(true);
+
+		progress = new ProgressDialog(this);
 
 		db = new DBConnector();
 
@@ -129,21 +134,13 @@ public class PriceAdd extends Activity implements View.OnClickListener, AdapterV
 		Object[] params = new Object[2];
 		params[0] = keyword;
 		params[1] = categoryId;
+
+		progress.setIndeterminate(true);
+		progress.setMessage("Searching..");
+		progress.show();
+
 		task.execute(params);
 
-		try {
-			products = task.get();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (ExecutionException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		ArrayAdapter<Product> newadapter = new ArrayAdapter<Product>(PriceAdd.this,
-				android.R.layout.simple_list_item_1, products);
-		listViewProducts.setAdapter(newadapter);
 	}
 
 	private void nextStep1() {
@@ -223,18 +220,21 @@ public class PriceAdd extends Activity implements View.OnClickListener, AdapterV
 	}
 
 	private class SearchProductsTask extends AsyncTask<Object, Void, ArrayList<Product>> {
-
-		@Override
-		protected void onPreExecute() {
-			// TODO some other progress dialog?
-			Toast.makeText(getApplicationContext(), "Searching...", Toast.LENGTH_SHORT).show();
-		}
-
 		@Override
 		protected ArrayList<Product> doInBackground(Object... params) {
 			String keyword = (String) params[0];
 			int categoryId = (Integer) params[1];
 			return db.searchProducts(keyword, categoryId);
+		}
+
+		@Override
+		protected void onPostExecute(ArrayList<Product> list) {
+			progress.hide();
+			products = list;
+
+			ArrayAdapter<Product> newadapter = new ArrayAdapter<Product>(PriceAdd.this,
+					android.R.layout.simple_list_item_1, products);
+			listViewProducts.setAdapter(newadapter);
 		}
 	}
 
@@ -251,7 +251,7 @@ public class PriceAdd extends Activity implements View.OnClickListener, AdapterV
 			InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 			imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 		} catch (Exception e) {
-			// TODO: handle exception
+			Log.e("PriceAdd", "Could not clear focus.", e);
 		}
 	}
 }

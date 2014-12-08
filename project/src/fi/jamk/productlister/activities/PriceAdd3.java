@@ -2,6 +2,7 @@ package fi.jamk.productlister.activities;
 
 import fi.jamk.productlister.db.DBConnector;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import fi.jamk.productlister.model.Price;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.json.JSONArray;
+import org.json.JSONException;
 
 /**
  *
@@ -27,11 +29,12 @@ public class PriceAdd3 extends Activity implements View.OnClickListener {
 	private int selectedShopId;
 	private String selectedProductName;
 	private String selectedShopName;
-	
+
 	private EditText unitPriceTextField;
 	private EditText quantityPriceTextField;
 	private TextView selectedProductTextView;
 	private TextView selectedShopTextView;
+	private ProgressDialog progress;
 
 	private DBConnector db;
 
@@ -48,6 +51,8 @@ public class PriceAdd3 extends Activity implements View.OnClickListener {
 		selectedProductTextView = (TextView) findViewById(R.id.product_add_price_view);
 		selectedShopTextView = (TextView) findViewById(R.id.product_add_price_shop_view);
 
+		progress = new ProgressDialog(this);
+
 		db = new DBConnector();
 
 		Intent intent = getIntent();
@@ -55,7 +60,7 @@ public class PriceAdd3 extends Activity implements View.OnClickListener {
 		selectedShopId = intent.getIntExtra("selectedShopId", 0);
 		selectedProductName = intent.getStringExtra("selectedProductName");
 		selectedShopName = intent.getStringExtra("selectedShopName");
-		
+
 		selectedProductTextView.setText(selectedProductName);
 		selectedShopTextView.setText(selectedShopName);
 	}
@@ -78,6 +83,10 @@ public class PriceAdd3 extends Activity implements View.OnClickListener {
 	}
 
 	private void addPrice() {
+		progress.setIndeterminate(true);
+		progress.setMessage("Adding product");
+		progress.show();
+
 		double unitPrice;
 		double quantityPrice;
 		try {
@@ -98,28 +107,37 @@ public class PriceAdd3 extends Activity implements View.OnClickListener {
 		try {
 			AddProductTask task = new AddProductTask();
 			task.execute(new Price(0, selectedShopId, selectedProductId, unitPrice, quantityPrice));
-
-			JSONArray result = task.get();
-
-			if (result.getJSONObject(0).getString("success").equals("0")) {
-				Toast.makeText(getApplicationContext(), result.getJSONObject(0).getString("message"), Toast.LENGTH_LONG).show();
-			} else {
-				Toast.makeText(getApplicationContext(), "Added price for: " + selectedProductName, Toast.LENGTH_SHORT).show();
-				// TODO move to product prices or what? main activity for now.
-				Intent intent = new Intent(this, MainActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // clear back button
-				startActivity(intent);
-			}
+			Intent intent = new Intent(this, ProductPrices.class);
+			intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK); // clear back button
+			intent.putExtra("selectedProductId", selectedProductId);
+			intent.putExtra("selectedProductName", selectedProductName);
+			startActivity(intent);
 		} catch (Exception ex) {
 			Logger.getLogger(ProductAdd.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
 
 	private class AddProductTask extends AsyncTask<Price, Void, JSONArray> {
+
 		@Override
 		protected JSONArray doInBackground(Price... params) {
 			JSONArray result = db.addPrice(params[0]);
 			return result;
+		}
+
+		@Override
+		protected void onPostExecute(JSONArray result) {
+			try {
+				if (result.getJSONObject(0).getString("success").equals("0")) {
+					progress.hide();
+					Toast.makeText(getApplicationContext(), result.getJSONObject(0).getString("message"), Toast.LENGTH_LONG).show();
+				} else {
+					progress.hide();
+
+				}
+			} catch (JSONException ex) {
+				Logger.getLogger(PriceAdd3.class.getName()).log(Level.SEVERE, null, ex);
+			}
 		}
 	}
 }

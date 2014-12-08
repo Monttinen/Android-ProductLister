@@ -2,10 +2,12 @@ package fi.jamk.productlister.activities;
 
 import fi.jamk.productlister.db.DBConnector;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -19,7 +21,6 @@ import android.widget.Toast;
 import fi.jamk.productlister.R;
 import fi.jamk.productlister.model.Shop;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,7 +36,8 @@ public class PriceAdd2 extends Activity implements View.OnClickListener, Adapter
 	private DBConnector db;
 	private ArrayList<Shop> shops;
 	private Shop selectedShop;
-
+	private ProgressDialog progress;
+	
 	private int selectedProductId;
 	private String selectedProductName;
 
@@ -57,7 +59,9 @@ public class PriceAdd2 extends Activity implements View.OnClickListener, Adapter
 		nextStep2.setOnClickListener(this);
 		search.setOnClickListener(this);
 		listViewShops.setOnItemClickListener(this);
-
+		
+		progress = new ProgressDialog(this);
+		
 		db = new DBConnector();
 		shops = new ArrayList<Shop>();
 		selectedShop = null;
@@ -95,6 +99,10 @@ public class PriceAdd2 extends Activity implements View.OnClickListener, Adapter
 		if(keyword.length()<1){
 			return;
 		}
+		progress.setIndeterminate(true);
+		progress.setMessage("Searching..");
+		progress.show();
+		
 		SearchShopsTask task = new SearchShopsTask();
 		task.execute(keyword);
 	}
@@ -115,12 +123,6 @@ public class PriceAdd2 extends Activity implements View.OnClickListener, Adapter
 	private class SearchShopsTask extends AsyncTask<String, Void, ArrayList<Shop>> {
 
 		@Override
-		protected void onPreExecute() {
-			// TODO some other progress dialog?
-			Toast.makeText(getApplicationContext(), "Searching...", Toast.LENGTH_SHORT).show();
-		}
-
-		@Override
 		protected ArrayList<Shop> doInBackground(String... keyword) {
 			try {
 				return db.searchShops(keyword[0]);
@@ -137,6 +139,7 @@ public class PriceAdd2 extends Activity implements View.OnClickListener, Adapter
 			ArrayAdapter<Shop> newadapter = new ArrayAdapter<Shop>(PriceAdd2.this,
 					android.R.layout.simple_list_item_1, shops);
 			listViewShops.setAdapter(newadapter);
+			progress.hide();
 		}
 	}
 
@@ -153,7 +156,7 @@ public class PriceAdd2 extends Activity implements View.OnClickListener, Adapter
 			InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 			imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 		} catch (Exception e) {
-			// TODO: handle exception
+			Log.e("PriceAdd2", "Could not clear focus.", e);
 		}
 	}
 }

@@ -3,6 +3,7 @@ package fi.jamk.productlister.db;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Base64;
+import android.util.Log;
 import fi.jamk.productlister.model.Category;
 import fi.jamk.productlister.model.Product;
 import fi.jamk.productlister.model.Price;
@@ -78,8 +79,7 @@ public class DBConnector {
 				}
 			}
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e("DBConnector", "Error parsing JSON", e);
 		}
 		return results;
 	}
@@ -138,8 +138,7 @@ public class DBConnector {
 				}
 			}
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e("DBConnector", "Error parsing JSON", e);
 		}
 		return results;
 	}
@@ -174,8 +173,7 @@ public class DBConnector {
 				}
 			}
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e("DBConnector", "Error parsing JSON", e);
 		}
 		return results;
 	}
@@ -209,8 +207,7 @@ public class DBConnector {
 				}
 			}
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e("DBConnector", "Error parsing JSON", e);
 		}
 		return results;
 	}
@@ -240,8 +237,7 @@ public class DBConnector {
 				result = new Shop(id, name, address, location);
 			}
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e("DBConnector", "Error parsing JSON", e);
 		}
 		return result;
 	}
@@ -316,11 +312,10 @@ public class DBConnector {
 				return null;
 			}
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
+			Log.e("DBConnector", "Malformed URL: ", e);
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e("DBConnector", "IO Exception: ", e);
 		}
 		return null;
 	}
@@ -363,8 +358,7 @@ public class DBConnector {
 			}
 			bufferedReader.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e("DBConnector", "IO Exception: ", e);
 		}
 
 		return stringBuilder.toString();

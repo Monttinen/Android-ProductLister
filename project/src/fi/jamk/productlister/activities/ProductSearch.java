@@ -3,7 +3,6 @@ package fi.jamk.productlister.activities;
 import fi.jamk.productlister.db.DBConnector;
 import fi.jamk.productlister.model.Product;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
@@ -11,6 +10,7 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -118,7 +118,6 @@ public class ProductSearch extends Activity implements OnClickListener, AdapterV
 		@Override
 		protected void onPostExecute(ArrayList<Product> list) {
 			Toast.makeText(getApplicationContext(), "Found " + list.size() + " products.", Toast.LENGTH_SHORT).show();
-			// TODO stop displaying other progress dialog
 			productlist = list;
 
 			//TODO custom list item with more info?
@@ -134,7 +133,7 @@ public class ProductSearch extends Activity implements OnClickListener, AdapterV
 			InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 			imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 		} catch (Exception e) {
-			// TODO: handle exception
+			Log.e("ProductSearch", "Could not clear focus.", e);
 		}
 	}
 }

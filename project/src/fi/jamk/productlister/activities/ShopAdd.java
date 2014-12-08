@@ -14,6 +14,7 @@ import static android.content.Context.INPUT_METHOD_SERVICE;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -62,23 +63,19 @@ public class ShopAdd extends Activity implements View.OnClickListener {
 	}
 
 	private void addShop() {
-		ShopName = txtShopName.getText().toString(); //setting Strings from EditTexts
+		//setting Strings from EditTexts
+		ShopName = txtShopName.getText().toString(); 
 		ShopAddress = txtShopAddress.getText().toString();
 		ShopLocation = txtShopLocation.getText().toString();
-			//String[] inputLines = input.split("\n");
-		//String productName = inputLines[0];
 
-		//TODO better validity check
 		if (ShopName.length() < 1 || ShopName.length() > 255) {
 			Toast.makeText(getApplicationContext(), "Shop name is not valid.", Toast.LENGTH_SHORT).show();
 			return;
 		}
-		//TODO better validity check
 		if (ShopName.length() < 1 || ShopName.length() > 255) {
 			Toast.makeText(getApplicationContext(), "Shop address is not valid.", Toast.LENGTH_SHORT).show();
 			return;
 		}
-		//TODO better validity check
 		if (ShopName.length() < 1 || ShopName.length() > 255) {
 			Toast.makeText(getApplicationContext(), "Shop location is not valid.", Toast.LENGTH_SHORT).show();
 			return;
@@ -130,7 +127,7 @@ public class ShopAdd extends Activity implements View.OnClickListener {
 			InputMethodManager imm = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 			imm.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
 		} catch (Exception e) {
-			// TODO: handle exception
+			Log.e("ShopAdd", "Could not clear focus.", e);
 		}
 	}
 }
