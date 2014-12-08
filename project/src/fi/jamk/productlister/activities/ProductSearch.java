@@ -143,6 +143,7 @@ public class ProductSearch extends Activity implements OnClickListener, AdapterV
 
 		@Override
 		protected void onPostExecute(ArrayList<Product> list) {
+			progress.hide();
 			Toast.makeText(getApplicationContext(), "Found " + list.size() + " products.", Toast.LENGTH_SHORT).show();
 			productlist = list;
 
@@ -150,7 +151,6 @@ public class ProductSearch extends Activity implements OnClickListener, AdapterV
 			ArrayAdapter<Product> newadapter = new ArrayAdapter<Product>(ProductSearch.this,
 					android.R.layout.simple_list_item_1, productlist);
 			listViewProducts.setAdapter(newadapter);
-			progress.hide();
 		}
 	}
 	

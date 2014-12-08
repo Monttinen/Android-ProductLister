@@ -152,12 +152,12 @@ public class PriceAdd2 extends Activity implements View.OnClickListener, Adapter
 
 		@Override
 		protected void onPostExecute(ArrayList<Shop> list) {
+			progress.hide();
 			shops = list;
 
 			ArrayAdapter<Shop> newadapter = new ArrayAdapter<Shop>(PriceAdd2.this,
 					android.R.layout.simple_list_item_1, shops);
 			listViewShops.setAdapter(newadapter);
-			progress.hide();
 		}
 	}
 	

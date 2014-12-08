@@ -64,12 +64,13 @@ public class PriceAdd3 extends Activity implements View.OnClickListener {
 		selectedProductTextView.setText(selectedProductName);
 		selectedShopTextView.setText(selectedShopName);
 	}
-	
+
 	/**
-	 * Used for navigating back from the action bar.
-	 * Navigates back to main activity.
+	 * Used for navigating back from the action bar. Navigates back to main
+	 * activity.
+	 *
 	 * @param item
-	 * @return 
+	 * @return
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -78,10 +79,11 @@ public class PriceAdd3 extends Activity implements View.OnClickListener {
 		startActivity(intent);
 		return true;
 	}
-	
+
 	/**
 	 * Listener for buttons.
-	 * @param v 
+	 *
+	 * @param v
 	 */
 	@Override
 	public void onClick(View v) {
@@ -91,13 +93,13 @@ public class PriceAdd3 extends Activity implements View.OnClickListener {
 				break;
 		}
 	}
-	
+
 	/**
 	 * Starts the price adding.
 	 */
 	private void addPrice() {
 		progress.setIndeterminate(true);
-		progress.setMessage("Adding product");
+		progress.setMessage("Adding price");
 		progress.show();
 
 		double unitPrice;
@@ -129,7 +131,7 @@ public class PriceAdd3 extends Activity implements View.OnClickListener {
 			Logger.getLogger(ProductAdd.class.getName()).log(Level.SEVERE, null, ex);
 		}
 	}
-	
+
 	/**
 	 * AsyncTask for adding a price to the database.
 	 */
@@ -143,13 +145,12 @@ public class PriceAdd3 extends Activity implements View.OnClickListener {
 
 		@Override
 		protected void onPostExecute(JSONArray result) {
+			progress.hide();
 			try {
 				if (result.getJSONObject(0).getString("success").equals("0")) {
-					progress.hide();
 					Toast.makeText(getApplicationContext(), result.getJSONObject(0).getString("message"), Toast.LENGTH_LONG).show();
 				} else {
-					progress.hide();
-
+					Toast.makeText(getApplicationContext(), "Added price for "+selectedShopName, Toast.LENGTH_LONG).show();
 				}
 			} catch (JSONException ex) {
 				Logger.getLogger(PriceAdd3.class.getName()).log(Level.SEVERE, null, ex);

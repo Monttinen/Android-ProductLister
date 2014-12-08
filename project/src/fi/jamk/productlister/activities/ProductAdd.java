@@ -334,9 +334,6 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 						+ result.getJSONObject(0).getString("message"),
 						Toast.LENGTH_LONG).show();
 			} else {
-				Toast.makeText(getApplicationContext(),
-						"Added product: " + productName, Toast.LENGTH_SHORT)
-						.show();
 				// clear the name field after adding
 				name.setText("");
 				addedProductId = result.getJSONObject(0).getInt("productid");
@@ -357,8 +354,6 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 								+ ex.getMessage(),
 								Toast.LENGTH_LONG).show();
 					}
-				} else {
-					progress.hide();
 				}
 			}
 		} catch (InterruptedException ex) {
@@ -414,7 +409,7 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 
 		@Override
 		protected void onPostExecute(JSONArray result) {
-
+			progress.hide();
 			try {
 				if (result.getJSONObject(0).getString("success").equals("0")) {
 					Toast.makeText(
@@ -430,8 +425,6 @@ public class ProductAdd extends Activity implements View.OnClickListener,
 			} catch (JSONException ex) {
 				Logger.getLogger(ProductAdd.class.getName()).log(Level.SEVERE, null, ex);
 			}
-			
-			progress.hide();
 		}
 	}
 

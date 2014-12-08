@@ -126,10 +126,10 @@ public class ProductPrices extends Activity implements View.OnClickListener {
 
 		@Override
 		protected void onPostExecute(ArrayList<Price> prices) {
+			progress.hide();
 			PriceAdapter newadapter = new PriceAdapter(ProductPrices.this,
 					R.layout.listview_price, prices);
 			priceList.setAdapter(newadapter);
-			progress.hide();
 		}
 	}
 }

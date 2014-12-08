@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import static android.content.Context.INPUT_METHOD_SERVICE;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -34,7 +35,8 @@ public class ShopAdd extends Activity implements View.OnClickListener {
 	private EditText txtShopName;
 	private EditText txtShopAddress;
 	private EditText txtShopLocation;
-
+	private ProgressDialog progress;
+	
 	String ShopName;
 	String ShopAddress;
 	String ShopLocation;
@@ -52,13 +54,15 @@ public class ShopAdd extends Activity implements View.OnClickListener {
 		txtShopAddress = (EditText) findViewById(R.id.editTextAddress);
 		txtShopLocation = (EditText) findViewById(R.id.editTextLocation);
 
+		progress = new ProgressDialog(this);
 	}
-	
+
 	/**
-	 * Used for navigating back from the action bar.
-	 * Navigates back to main activity.
+	 * Used for navigating back from the action bar. Navigates back to main
+	 * activity.
+	 *
 	 * @param item
-	 * @return 
+	 * @return
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -67,14 +71,14 @@ public class ShopAdd extends Activity implements View.OnClickListener {
 		startActivity(intent);
 		return true;
 	}
-	
+
 	/**
-	 * A method called when pressing the add button.
-	 * Validates input fields and starts the AddShopTask
+	 * A method called when pressing the add button. Validates input fields and
+	 * starts the AddShopTask
 	 */
 	private void addShop() {
 		//setting Strings from EditTexts
-		ShopName = txtShopName.getText().toString(); 
+		ShopName = txtShopName.getText().toString();
 		ShopAddress = txtShopAddress.getText().toString();
 		ShopLocation = txtShopLocation.getText().toString();
 
@@ -90,6 +94,9 @@ public class ShopAdd extends Activity implements View.OnClickListener {
 			Toast.makeText(getApplicationContext(), "Shop location is not valid.", Toast.LENGTH_SHORT).show();
 			return;
 		}
+		progress.setIndeterminate(true);
+		progress.setMessage("Adding shop " + ShopName);
+		progress.show();
 
 		AddShopTask task = new AddShopTask();
 		task.execute(new Shop(0, ShopName, ShopAddress, ShopLocation));
@@ -97,10 +104,11 @@ public class ShopAdd extends Activity implements View.OnClickListener {
 		txtShopLocation.setText("");
 		txtShopName.setText("");
 	}
-	
+
 	/**
 	 * OnClickListener for the add button.
-	 * @param v 
+	 *
+	 * @param v
 	 */
 	@Override
 	public void onClick(View v) {
@@ -113,7 +121,7 @@ public class ShopAdd extends Activity implements View.OnClickListener {
 		}
 
 	}
-	
+
 	/**
 	 * AsyncTask for adding a shop.
 	 */
@@ -127,6 +135,8 @@ public class ShopAdd extends Activity implements View.OnClickListener {
 
 		@Override
 		protected void onPostExecute(JSONArray result) {
+			
+			progress.hide();
 			try {
 				if (result.getJSONObject(0).getString("success").equals("0")) {
 					Toast.makeText(getApplicationContext(), "Error adding shop: " + result.getJSONObject(0).getString("message"), Toast.LENGTH_LONG).show();
@@ -138,7 +148,7 @@ public class ShopAdd extends Activity implements View.OnClickListener {
 			}
 		}
 	}
-	
+
 	/**
 	 * A method for clearing the focus. For example used for removing the
 	 * virtual keyboard when a button has been pressed.

@@ -74,9 +74,11 @@ public class PriceAdapter extends ArrayAdapter<Price>{
 		
         holder.shop.setText(shopName);
         holder.uprice.setText(price.getUnitPrice()+"e");
-		holder.qprice.setText("["+price.getQuantityPrice()+"e/l or kg]");
-		
-       
+		if(price.getQuantityPrice() <= 0.0){
+			holder.qprice.setText("");
+		} else {
+			holder.qprice.setText("["+price.getQuantityPrice()+"e/l or kg]");
+		}
         return row;
 	}
 	
